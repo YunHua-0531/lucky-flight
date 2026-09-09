@@ -3,67 +3,716 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lucky Flight</title>
+  <title>Lucky Flight｜教師里程管理系統</title>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f7fa;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+      font-family: Arial, "Noto Sans TC", sans-serif;
+      background: #f4f6f8;
+      color: #263238;
     }
 
-    .card {
+    header {
       background: white;
-      padding: 40px;
+      padding: 22px 30px;
+      border-bottom: 1px solid #e2e5e8;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      font-size: 34px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .brand p {
+      margin: 3px 0 0;
+      color: #78909c;
+      font-size: 13px;
+    }
+
+    .teacher {
+      color: #607d8b;
+      font-size: 14px;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-bottom: 25px;
+    }
+
+    .summary-card {
+      background: white;
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+    }
+
+    .summary-title {
+      color: #78909c;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .summary-number {
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    .content-card {
+      background: white;
+      border-radius: 18px;
+      padding: 25px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 20px;
+      align-items: center;
+    }
+
+    .toolbar h2 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    #search {
+      width: 230px;
+      padding: 10px 14px;
+      border: 1px solid #d7dde1;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      text-align: left;
+      background: #f7f8f9;
+      color: #607d8b;
+      padding: 13px;
+      font-size: 14px;
+    }
+
+    td {
+      padding: 15px 13px;
+      border-bottom: 1px solid #edf0f2;
+    }
+
+    .student-name {
+      font-weight: bold;
+    }
+
+    .miles {
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .qualification {
+      display: inline-block;
+      padding: 5px 10px;
       border-radius: 20px;
-      text-align: center;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-      max-width: 500px;
-      width: 90%;
+      font-size: 13px;
+      background: #f1f3f4;
+      color: #78909c;
     }
 
-    .logo {
-      font-size: 60px;
-    }
-
-    h1 {
-      margin-bottom: 10px;
-    }
-
-    p {
-      color: #666;
+    .qualification.ready {
+      background: #fff3cd;
+      color: #8a6500;
+      font-weight: bold;
     }
 
     button {
-      margin-top: 20px;
-      padding: 12px 25px;
       border: none;
-      border-radius: 10px;
-      background: #222;
-      color: white;
-      font-size: 16px;
+      border-radius: 9px;
+      padding: 8px 13px;
       cursor: pointer;
+      font-size: 14px;
+    }
+
+    .add-btn {
+      background: #263238;
+      color: white;
+    }
+
+    .minus-btn {
+      background: #eceff1;
+      color: #37474f;
+      margin-left: 5px;
+    }
+
+    button:hover {
+      opacity: 0.8;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 30px;
+      color: #90a4ae;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: #90a4ae;
+      font-size: 13px;
+    }
+
+    /* Modal */
+    .modal-bg {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal {
+      background: white;
+      width: 100%;
+      max-width: 430px;
+      border-radius: 18px;
+      padding: 25px;
+    }
+
+    .modal h2 {
+      margin-top: 0;
+    }
+
+    .modal label {
+      display: block;
+      margin-top: 16px;
+      margin-bottom: 7px;
+      font-size: 14px;
+      color: #607d8b;
+    }
+
+    .modal select,
+    .modal textarea {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid #d7dde1;
+      border-radius: 9px;
+      font-size: 14px;
+    }
+
+    .modal textarea {
+      height: 80px;
+      resize: vertical;
+    }
+
+    .modal-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .cancel-btn {
+      background: #eceff1;
+    }
+
+    .confirm-btn {
+      background: #263238;
+      color: white;
+    }
+
+    @media (max-width: 700px) {
+      header {
+        padding: 18px;
+      }
+
+      .teacher {
+        display: none;
+      }
+
+      main {
+        margin-top: 20px;
+        padding: 0 12px;
+      }
+
+      .summary {
+        grid-template-columns: 1fr;
+      }
+
+      .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      #search {
+        width: 100%;
+      }
+
+      .content-card {
+        padding: 15px;
+        overflow-x: auto;
+      }
+
+      table {
+        min-width: 650px;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <div class="card">
-    <div class="logo">✈️</div>
-
-    <h1>Lucky Flight</h1>
-
-    <p>教師里程管理系統</p>
-
-    <button onclick="alert('Lucky Flight 起飛！')">
-      開始管理
-    </button>
+<header>
+  <div class="brand">
+    <div class="brand-icon">✈️</div>
+    <div>
+      <h1>Lucky Flight</h1>
+      <p>教師里程管理系統</p>
+    </div>
   </div>
+
+  <div class="teacher">
+    👩‍🏫 教師管理模式
+  </div>
+</header>
+
+<main>
+
+  <section class="summary">
+
+    <div class="summary-card">
+      <div class="summary-title">👩‍🎓 學生人數</div>
+      <div class="summary-number" id="studentCount">0</div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-title">✈️ 全班總里程</div>
+      <div class="summary-number" id="totalMiles">0</div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-title">🎫 待使用抽獎資格</div>
+      <div class="summary-number" id="totalTickets">0</div>
+    </div>
+
+  </section>
+
+  <section class="content-card">
+
+    <div class="toolbar">
+      <h2>👩‍🎓 學生里程管理</h2>
+      <input
+        type="text"
+        id="search"
+        placeholder="🔍 搜尋學生姓名"
+        oninput="renderStudents()"
+      >
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>學生姓名</th>
+          <th>目前 Miles</th>
+          <th>抽獎資格</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+
+      <tbody id="studentTable"></tbody>
+    </table>
+
+  </section>
+
+</main>
+
+<footer>
+  ✈️ Lucky Flight｜教師里程管理系統
+</footer>
+
+
+<!-- Miles 操作視窗 -->
+
+<div class="modal-bg" id="modalBg">
+
+  <div class="modal">
+
+    <h2 id="modalTitle">增加 Miles</h2>
+
+    <label>學生</label>
+    <div id="selectedStudent"></div>
+
+    <label>里程數</label>
+
+    <select id="mileAmount">
+      <option value="1">＋1 Mile</option>
+      <option value="2">＋2 Miles</option>
+      <option value="3">＋3 Miles</option>
+    </select>
+
+    <label>原因</label>
+
+    <textarea
+      id="reason"
+      placeholder="例如：完成加深加廣任務"
+    ></textarea>
+
+    <div class="modal-buttons">
+      <button class="cancel-btn" onclick="closeModal()">
+        取消
+      </button>
+
+      <button class="confirm-btn" onclick="confirmMiles()">
+        確認
+      </button>
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+  /*
+   * Lucky Flight V1
+   *
+   * 目前使用瀏覽器 localStorage 儲存資料。
+   * 下一階段會改成 Firebase 雲端資料庫。
+   */
+
+  let students = JSON.parse(
+    localStorage.getItem("luckyFlightStudents")
+  ) || [
+    {
+      id: 1,
+      name: "王小明",
+      miles: 12,
+      tickets: 0,
+      history: []
+    },
+    {
+      id: 2,
+      name: "林小華",
+      miles: 15,
+      tickets: 1,
+      history: []
+    },
+    {
+      id: 3,
+      name: "陳小美",
+      miles: 8,
+      tickets: 0,
+      history: []
+    }
+  ];
+
+  let currentStudentId = null;
+  let currentAction = "add";
+
+
+  function saveData() {
+
+    localStorage.setItem(
+      "luckyFlightStudents",
+      JSON.stringify(students)
+    );
+
+  }
+
+
+  function renderStudents() {
+
+    const keyword =
+      document
+        .getElementById("search")
+        .value
+        .trim()
+        .toLowerCase();
+
+    const table =
+      document.getElementById("studentTable");
+
+    table.innerHTML = "";
+
+    const filteredStudents =
+      students.filter(student =>
+        student.name.toLowerCase().includes(keyword)
+      );
+
+    if (filteredStudents.length === 0) {
+
+      table.innerHTML = `
+        <tr>
+          <td colspan="4" class="empty">
+            找不到符合的學生
+          </td>
+        </tr>
+      `;
+
+      return;
+    }
+
+
+    filteredStudents.forEach(student => {
+
+      const row = document.createElement("tr");
+
+      const qualification =
+        student.tickets > 0
+          ? `<span class="qualification ready">
+               🎫 ${student.tickets} 次
+             </span>`
+          : `<span class="qualification">
+               尚未取得
+             </span>`;
+
+
+      row.innerHTML = `
+
+        <td>
+          <div class="student-name">
+            ${student.name}
+          </div>
+        </td>
+
+        <td>
+          <span class="miles">
+            ${student.miles}
+          </span>
+          Miles
+        </td>
+
+        <td>
+          ${qualification}
+        </td>
+
+        <td>
+
+          <button
+            class="add-btn"
+            onclick="openModal(${student.id}, 'add')"
+          >
+            ＋ Miles
+          </button>
+
+          <button
+            class="minus-btn"
+            onclick="openModal(${student.id}, 'minus')"
+          >
+            － Miles
+          </button>
+
+        </td>
+
+      `;
+
+      table.appendChild(row);
+
+    });
+
+
+    updateSummary();
+
+  }
+
+
+  function updateSummary() {
+
+    document.getElementById("studentCount").textContent =
+      students.length;
+
+
+    const totalMiles =
+      students.reduce(
+        (sum, student) => sum + student.miles,
+        0
+      );
+
+    document.getElementById("totalMiles").textContent =
+      totalMiles;
+
+
+    const totalTickets =
+      students.reduce(
+        (sum, student) => sum + student.tickets,
+        0
+      );
+
+    document.getElementById("totalTickets").textContent =
+      totalTickets;
+
+  }
+
+
+  function openModal(studentId, action) {
+
+    currentStudentId = studentId;
+    currentAction = action;
+
+    const student =
+      students.find(s => s.id === studentId);
+
+    document.getElementById("modalTitle").textContent =
+      action === "add"
+        ? "增加 Miles"
+        : "扣除 Miles";
+
+    document.getElementById("selectedStudent").textContent =
+      student.name;
+
+    document.getElementById("mileAmount").innerHTML = `
+
+      <option value="1">
+        ${action === "add" ? "＋" : "－"}1 Mile
+      </option>
+
+      <option value="2">
+        ${action === "add" ? "＋" : "－"}2 Miles
+      </option>
+
+      <option value="3">
+        ${action === "add" ? "＋" : "－"}3 Miles
+      </option>
+
+    `;
+
+    document.getElementById("reason").value = "";
+
+    document.getElementById("modalBg").style.display =
+      "flex";
+
+  }
+
+
+  function closeModal() {
+
+    document.getElementById("modalBg").style.display =
+      "none";
+
+  }
+
+
+  function confirmMiles() {
+
+    const student =
+      students.find(s => s.id === currentStudentId);
+
+    const amount =
+      Number(
+        document.getElementById("mileAmount").value
+      );
+
+    const reason =
+      document
+        .getElementById("reason")
+        .value
+        .trim();
+
+
+    if (!reason) {
+
+      alert("請輸入此次 Miles 的原因。");
+
+      return;
+
+    }
+
+
+    if (currentAction === "minus") {
+
+      if (student.miles < amount) {
+
+        alert("目前 Miles 不足，無法扣除。");
+
+        return;
+
+      }
+
+      student.miles -= amount;
+
+    } else {
+
+      student.miles += amount;
+
+    }
+
+
+    student.history.push({
+
+      date: new Date().toLocaleString("zh-TW"),
+
+      amount:
+        currentAction === "add"
+          ? amount
+          : -amount,
+
+      reason: reason
+
+    });
+
+
+    /*
+     * 每累積 15 Miles，
+     * 產生 1 次抽獎資格。
+     */
+
+    const oldTickets = student.tickets;
+
+    student.tickets =
+      Math.floor(student.miles / 15);
+
+
+    if (student.tickets > oldTickets) {
+
+      alert(
+        `🎉 ${student.name} 已取得新的抽獎資格！`
+      );
+
+    }
+
+
+    saveData();
+
+    closeModal();
+
+    renderStudents();
+
+  }
+
+
+  renderStudents();
+
+</script>
 
 </body>
 </html>
