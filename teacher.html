@@ -1,0 +1,1739 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>👩‍🏫 Lucky Flight 教師管理</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "Noto Sans TC",
+        Arial,
+        sans-serif;
+    background:#f4f7fb;
+    color:#243447;
+}
+
+/* =========================
+   Header
+========================= */
+
+header{
+    background:linear-gradient(
+        135deg,
+        #182848,
+        #4b6cb7
+    );
+    color:white;
+    padding:25px 20px;
+    text-align:center;
+}
+
+header h1{
+    margin:0;
+    font-size:27px;
+}
+
+header p{
+    margin:7px 0 0;
+    opacity:.9;
+}
+
+/* =========================
+   Login
+========================= */
+
+.login-box{
+    max-width:420px;
+    margin:70px auto;
+    background:white;
+    padding:35px;
+    border-radius:20px;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+    text-align:center;
+}
+
+.login-box h2{
+    margin-top:0;
+}
+
+.login-box input{
+    width:100%;
+    padding:13px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    margin:12px 0;
+    font-size:16px;
+}
+
+.primary-btn{
+    background:#4b6cb7;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+/* =========================
+   Container
+========================= */
+
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:25px 18px;
+}
+
+/* =========================
+   Top
+========================= */
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+    gap:10px;
+}
+
+.logout{
+    background:#eee;
+    color:#333;
+    border:none;
+    padding:10px 16px;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+/* =========================
+   Grade
+========================= */
+
+.grade-buttons{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.grade-buttons button{
+    flex:1;
+    border:none;
+    padding:13px;
+    border-radius:12px;
+    background:white;
+    cursor:pointer;
+    font-size:16px;
+    box-shadow:0 2px 8px rgba(0,0,0,.05);
+}
+
+.grade-buttons button.active{
+    background:#4b6cb7;
+    color:white;
+}
+
+/* =========================
+   Toolbar
+========================= */
+
+.toolbar{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+}
+
+.toolbar input{
+    flex:1;
+    min-width:200px;
+    padding:12px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    font-size:15px;
+}
+
+.toolbar button{
+    border:none;
+    background:#4b6cb7;
+    color:white;
+    padding:12px 18px;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+/* =========================
+   Cards
+========================= */
+
+.student-grid{
+    display:grid;
+    grid-template-columns:
+        repeat(auto-fill,minmax(290px,1fr));
+    gap:18px;
+}
+
+.student-card{
+    background:white;
+    border-radius:18px;
+    padding:20px;
+    box-shadow:0 4px 15px rgba(0,0,0,.07);
+}
+
+.student-top{
+    display:flex;
+    justify-content:space-between;
+}
+
+.student-name{
+    font-size:21px;
+    font-weight:bold;
+}
+
+.student-grade{
+    color:#777;
+    font-size:13px;
+    margin-top:4px;
+}
+
+.miles{
+    font-size:36px;
+    font-weight:bold;
+    margin:15px 0 5px;
+    color:#4b6cb7;
+}
+
+.miles-label{
+    color:#888;
+    font-size:13px;
+}
+
+.ticket{
+    background:#f3f6fb;
+    border-radius:12px;
+    padding:12px;
+    margin:15px 0;
+}
+
+.ticket strong{
+    font-size:22px;
+}
+
+.card-buttons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+
+.card-buttons button{
+    border:none;
+    padding:10px;
+    border-radius:9px;
+    cursor:pointer;
+}
+
+.add-btn{
+    background:#e6f6ec;
+    color:#237a42;
+}
+
+.minus-btn{
+    background:#fdeaea;
+    color:#a33;
+}
+
+.use-btn{
+    grid-column:span 2;
+    background:#182848;
+    color:white;
+}
+
+.history-btn{
+    grid-column:span 2;
+    background:#eef2f7;
+}
+
+/* =========================
+   Modal
+========================= */
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    z-index:1000;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    width:100%;
+    max-width:420px;
+    background:white;
+    border-radius:20px;
+    padding:25px;
+    max-height:90vh;
+    overflow:auto;
+}
+
+.modal-box h2{
+    margin-top:0;
+}
+
+.modal-box input,
+.modal-box select{
+    width:100%;
+    padding:12px;
+    margin:8px 0;
+    border:1px solid #ddd;
+    border-radius:10px;
+    font-size:15px;
+}
+
+.modal-buttons{
+    display:flex;
+    gap:10px;
+    margin-top:15px;
+}
+
+.modal-buttons button{
+    flex:1;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+.cancel-btn{
+    background:#eee;
+}
+
+.confirm-btn{
+    background:#4b6cb7;
+    color:white;
+}
+
+/* =========================
+   History
+========================= */
+
+.history-item{
+    border-bottom:1px solid #eee;
+    padding:12px 0;
+}
+
+.history-item:last-child{
+    border-bottom:none;
+}
+
+.history-date{
+    color:#888;
+    font-size:12px;
+    margin-top:3px;
+}
+
+.history-mile{
+    font-weight:bold;
+    margin-top:3px;
+}
+
+/* =========================
+   Empty
+========================= */
+
+.empty{
+    text-align:center;
+    padding:50px;
+    color:#888;
+}
+
+@media(max-width:600px){
+
+    .topbar{
+        align-items:flex-start;
+    }
+
+    .student-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<header>
+
+    <h1>✈️ Lucky Flight</h1>
+
+    <p>
+        👩‍🏫 教師智慧座艙
+    </p>
+
+</header>
+
+
+<!-- =====================================================
+     LOGIN
+===================================================== -->
+
+<div
+    id="loginBox"
+    class="login-box">
+
+    <h2>
+        👩‍🏫 教師管理登入
+    </h2>
+
+    <p>
+        請輸入教師密碼
+    </p>
+
+    <input
+        type="password"
+        id="password"
+        placeholder="教師密碼"
+        onkeydown="
+            if(event.key==='Enter')
+            teacherLogin();
+        ">
+
+    <button
+        class="primary-btn"
+        onclick="teacherLogin()">
+
+        登入
+
+    </button>
+
+</div>
+
+
+<!-- =====================================================
+     DASHBOARD
+===================================================== -->
+
+<div
+    id="dashboard"
+    style="display:none;">
+
+    <div class="container">
+
+
+        <div class="topbar">
+
+            <h2 style="margin:0;">
+                ✈️ 智慧座艙
+            </h2>
+
+            <button
+                class="logout"
+                onclick="teacherLogout()">
+
+                登出
+
+            </button>
+
+        </div>
+
+
+        <!-- Grade -->
+
+        <div class="grade-buttons">
+
+            <button
+                id="grade3Btn"
+                onclick="setGrade(3)">
+
+                三年級
+
+            </button>
+
+
+            <button
+                id="grade4Btn"
+                onclick="setGrade(4)">
+
+                四年級
+
+            </button>
+
+
+            <button
+                id="grade6Btn"
+                onclick="setGrade(6)">
+
+                六年級
+
+            </button>
+
+        </div>
+
+
+        <!-- Toolbar -->
+
+        <div class="toolbar">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="🔍 搜尋姓名或座號"
+                oninput="renderStudents()">
+
+
+            <button
+                onclick="openAddStudentModal()">
+
+                ＋ 新增學生
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="studentGrid"
+            class="student-grid">
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MILES MODAL
+===================================================== -->
+
+<div
+    id="milesModal"
+    class="modal">
+
+    <div class="modal-box">
+
+        <h2 id="milesModalTitle">
+            ＋ 增加 Miles
+        </h2>
+
+        <p id="milesModalStudent">
+        </p>
+
+
+        <select id="mileAmount">
+
+            <option value="1">
+                ＋1 Mile
+            </option>
+
+            <option value="2">
+                ＋2 Miles
+            </option>
+
+            <option value="3">
+                ＋3 Miles
+            </option>
+
+            <option value="5">
+                ＋5 Miles
+            </option>
+
+            <option value="10">
+                ＋10 Miles
+            </option>
+
+            <option value="custom">
+                自訂 Miles
+            </option>
+
+        </select>
+
+
+        <input
+            type="number"
+            id="customMiles"
+            min="1"
+            step="1"
+            placeholder="請輸入 Miles"
+            style="display:none;">
+
+
+        <div class="modal-buttons">
+
+            <button
+                class="cancel-btn"
+                onclick="
+                    closeModal('milesModal')
+                ">
+
+                取消
+
+            </button>
+
+
+            <button
+                class="confirm-btn"
+                onclick="confirmMiles()">
+
+                確定
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     ADD STUDENT MODAL
+===================================================== -->
+
+<div
+    id="addStudentModal"
+    class="modal">
+
+    <div class="modal-box">
+
+        <h2>
+            ＋ 新增學生
+        </h2>
+
+
+        <input
+            type="text"
+            id="newStudentId"
+            placeholder="座號，例如：01">
+
+
+        <input
+            type="text"
+            id="newStudentName"
+            placeholder="學生姓名">
+
+
+        <select id="newStudentGrade">
+
+            <option value="3">
+                三年級
+            </option>
+
+            <option value="4">
+                四年級
+            </option>
+
+            <option value="6">
+                六年級
+            </option>
+
+        </select>
+
+
+        <div class="modal-buttons">
+
+            <button
+                class="cancel-btn"
+                onclick="
+                    closeModal('addStudentModal')
+                ">
+
+                取消
+
+            </button>
+
+
+            <button
+                class="confirm-btn"
+                onclick="addStudent()">
+
+                新增
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     HISTORY MODAL
+===================================================== -->
+
+<div
+    id="historyModal"
+    class="modal">
+
+    <div class="modal-box">
+
+        <h2 id="historyTitle">
+            📖 飛行紀錄
+        </h2>
+
+
+        <div id="historyContent">
+        </div>
+
+
+        <div class="modal-buttons">
+
+            <button
+                class="cancel-btn"
+                onclick="
+                    closeModal('historyModal')
+                ">
+
+                關閉
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   基本設定
+===================================================== */
+
+const gradeRules = {
+
+    3:{
+        name:"三年級",
+        threshold:30
+    },
+
+    4:{
+        name:"四年級",
+        threshold:30
+    },
+
+    6:{
+        name:"六年級",
+        threshold:80
+    }
+
+};
+
+
+/*
+   測試版教師密碼
+   正式版會改成 Firebase Authentication
+*/
+
+const TEACHER_PASSWORD = "1234";
+
+
+let students =
+    JSON.parse(
+        localStorage.getItem(
+            "luckyFlightStudentsV2"
+        )
+    ) || [];
+
+
+let currentGrade = 3;
+
+let currentMilesStudentId = null;
+
+let currentMilesAction = null;
+
+
+/* =====================================================
+   儲存
+===================================================== */
+
+function saveStudents(){
+
+    localStorage.setItem(
+        "luckyFlightStudentsV2",
+        JSON.stringify(students)
+    );
+
+}
+
+
+/* =====================================================
+   初始化資料
+===================================================== */
+
+function init(){
+
+    if(students.length === 0){
+
+        students = [
+
+            {
+                id:"01",
+                name:"王小明",
+                grade:3,
+                miles:25,
+                history:[]
+            },
+
+            {
+                id:"02",
+                name:"林小華",
+                grade:4,
+                miles:45,
+                history:[]
+            },
+
+            {
+                id:"03",
+                name:"陳小美",
+                grade:6,
+                miles:100,
+                history:[]
+            }
+
+        ];
+
+        saveStudents();
+
+    }
+
+
+    setGrade(3);
+
+}
+
+
+/* =====================================================
+   登入
+===================================================== */
+
+function teacherLogin(){
+
+    const password =
+        document.getElementById(
+            "password"
+        ).value;
+
+
+    if(password !== TEACHER_PASSWORD){
+
+        alert(
+            "教師密碼錯誤。"
+        );
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "loginBox"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "dashboard"
+    ).style.display = "block";
+
+
+    renderStudents();
+
+}
+
+
+function teacherLogout(){
+
+    document.getElementById(
+        "dashboard"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "loginBox"
+    ).style.display = "block";
+
+
+    document.getElementById(
+        "password"
+    ).value = "";
+
+}
+
+
+/* =====================================================
+   年級
+===================================================== */
+
+function setGrade(grade){
+
+    currentGrade = grade;
+
+
+    document
+        .querySelectorAll(
+            ".grade-buttons button"
+        )
+        .forEach(button => {
+
+            button.classList.remove(
+                "active"
+            );
+
+        });
+
+
+    document
+        .getElementById(
+            "grade" + grade + "Btn"
+        )
+        .classList.add("active");
+
+
+    renderStudents();
+
+}
+
+
+/* =====================================================
+   Tickets
+===================================================== */
+
+function getTickets(student){
+
+    const threshold =
+        gradeRules[
+            student.grade
+        ].threshold;
+
+
+    return Math.floor(
+        student.miles / threshold
+    );
+
+}
+
+
+/* =====================================================
+   Render
+===================================================== */
+
+function renderStudents(){
+
+    const grid =
+        document.getElementById(
+            "studentGrid"
+        );
+
+
+    const search =
+        document.getElementById(
+            "searchInput"
+        ).value
+        .trim()
+        .toLowerCase();
+
+
+    const filtered =
+        students
+            .filter(student => {
+
+                if(
+                    student.grade !==
+                    currentGrade
+                ){
+
+                    return false;
+
+                }
+
+
+                if(!search){
+
+                    return true;
+
+                }
+
+
+                return (
+                    student.name
+                        .toLowerCase()
+                        .includes(search)
+                    ||
+                    student.id
+                        .toLowerCase()
+                        .includes(search)
+                );
+
+            })
+            .sort(
+                (a,b) =>
+                    a.id.localeCompare(
+                        b.id,
+                        undefined,
+                        {
+                            numeric:true
+                        }
+                    )
+            );
+
+
+    if(filtered.length === 0){
+
+        grid.innerHTML = `
+
+            <div class="empty">
+
+                目前沒有符合條件的學生。
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    grid.innerHTML =
+        filtered
+            .map(student => {
+
+                const tickets =
+                    getTickets(student);
+
+
+                const threshold =
+                    gradeRules[
+                        student.grade
+                    ].threshold;
+
+
+                return `
+
+                    <div
+                        class="student-card">
+
+                        <div
+                            class="student-top">
+
+                            <div>
+
+                                <div
+                                    class="student-name">
+
+                                    ${student.name}
+
+                                </div>
+
+                                <div
+                                    class="student-grade">
+
+                                    ${gradeRules[
+                                        student.grade
+                                    ].name}
+
+                                    ｜座號
+                                    ${student.id}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="miles">
+
+                            ${student.miles}
+
+                        </div>
+
+
+                        <div
+                            class="miles-label">
+
+                            Miles
+
+                        </div>
+
+
+                        <div
+                            class="ticket">
+
+                            🎫 可抽獎
+
+                            <strong>
+                                ${tickets}
+                            </strong>
+
+                            次
+
+                            <div
+                                style="
+                                font-size:12px;
+                                color:#888;
+                                margin-top:4px;
+                                ">
+
+                                ${threshold}
+                                Miles／次
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="card-buttons">
+
+
+                            <button
+                                class="add-btn"
+                                onclick="
+                                    openMilesModal(
+                                        '${student.id}',
+                                        'add'
+                                    )
+                                ">
+
+                                ＋ Miles
+
+                            </button>
+
+
+                            <button
+                                class="minus-btn"
+                                onclick="
+                                    openMilesModal(
+                                        '${student.id}',
+                                        'minus'
+                                    )
+                                ">
+
+                                − Miles
+
+                            </button>
+
+
+                            <button
+                                class="use-btn"
+                                onclick="
+                                    useTicket(
+                                        '${student.id}'
+                                    )
+                                ">
+
+                                🎫 使用一次
+
+                            </button>
+
+
+                            <button
+                                class="history-btn"
+                                onclick="
+                                    openHistory(
+                                        '${student.id}'
+                                    )
+                                ">
+
+                                📖 飛行紀錄
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            })
+            .join("");
+
+}
+
+
+/* =====================================================
+   Miles Modal
+===================================================== */
+
+function openMilesModal(
+    studentId,
+    action
+){
+
+    const student =
+        students.find(
+            s => s.id === studentId
+        );
+
+
+    if(!student) return;
+
+
+    currentMilesStudentId =
+        studentId;
+
+
+    currentMilesAction =
+        action;
+
+
+    const select =
+        document.getElementById(
+            "mileAmount"
+        );
+
+
+    const customInput =
+        document.getElementById(
+            "customMiles"
+        );
+
+
+    const sign =
+        action === "add"
+        ? "＋"
+        : "−";
+
+
+    select.innerHTML = `
+
+        <option value="1">
+            ${sign}1 Mile
+        </option>
+
+        <option value="2">
+            ${sign}2 Miles
+        </option>
+
+        <option value="3">
+            ${sign}3 Miles
+        </option>
+
+        <option value="5">
+            ${sign}5 Miles
+        </option>
+
+        <option value="10">
+            ${sign}10 Miles
+        </option>
+
+        <option value="custom">
+            自訂 Miles
+        </option>
+
+    `;
+
+
+    customInput.value = "";
+
+    customInput.style.display =
+        "none";
+
+
+    select.onchange = function(){
+
+        customInput.style.display =
+            this.value === "custom"
+            ? "block"
+            : "none";
+
+    };
+
+
+    document.getElementById(
+        "milesModalTitle"
+    ).textContent =
+        action === "add"
+        ? "＋ 增加 Miles"
+        : "− 扣除 Miles";
+
+
+    document.getElementById(
+        "milesModalStudent"
+    ).textContent =
+        `${student.name}｜目前 ${student.miles} Miles`;
+
+
+    document
+        .getElementById(
+            "milesModal"
+        )
+        .classList.add("show");
+
+}
+
+
+/* =====================================================
+   Confirm Miles
+===================================================== */
+
+function confirmMiles(){
+
+    const student =
+        students.find(
+            s => s.id === currentMilesStudentId
+        );
+
+
+    if(!student) return;
+
+
+    const select =
+        document.getElementById(
+            "mileAmount"
+        );
+
+
+    let amount;
+
+
+    if(select.value === "custom"){
+
+        amount =
+            Number(
+                document.getElementById(
+                    "customMiles"
+                ).value
+            );
+
+
+        if(
+            !Number.isInteger(amount) ||
+            amount <= 0
+        ){
+
+            alert(
+                "請輸入大於 0 的整數 Miles。"
+            );
+
+            return;
+
+        }
+
+    }
+
+    else{
+
+        amount =
+            Number(select.value);
+
+    }
+
+
+    if(
+        currentMilesAction ===
+        "add"
+    ){
+
+        student.miles += amount;
+
+
+        student.history.unshift({
+
+            type:"➕ 增加 Miles",
+
+            amount:amount,
+
+            date:new Date()
+                .toLocaleString(
+                    "zh-TW"
+                )
+
+        });
+
+    }
+
+    else{
+
+        if(student.miles < amount){
+
+            alert(
+                "Miles 不足，無法扣除。"
+            );
+
+            return;
+
+        }
+
+
+        student.miles -= amount;
+
+
+        student.history.unshift({
+
+            type:"➖ 扣除 Miles",
+
+            amount:-amount,
+
+            date:new Date()
+                .toLocaleString(
+                    "zh-TW"
+                )
+
+        });
+
+    }
+
+
+    saveStudents();
+
+    closeModal(
+        "milesModal"
+    );
+
+    renderStudents();
+
+}
+
+
+/* =====================================================
+   使用一次抽獎
+===================================================== */
+
+function useTicket(studentId){
+
+    const student =
+        students.find(
+            s => s.id === studentId
+        );
+
+
+    if(!student) return;
+
+
+    const threshold =
+        gradeRules[
+            student.grade
+        ].threshold;
+
+
+    const tickets =
+        getTickets(student);
+
+
+    if(tickets <= 0){
+
+        alert(
+            `目前還不能抽獎。\n需要 ${threshold} Miles 才能抽一次。`
+        );
+
+        return;
+
+    }
+
+
+    const ok =
+        confirm(
+            `確定要讓 ${student.name} 使用一次實體抽獎嗎？\n\n將扣除 ${threshold} Miles。`
+        );
+
+
+    if(!ok) return;
+
+
+    student.miles -= threshold;
+
+
+    student.history.unshift({
+
+        type:"🎫 實體抽獎",
+
+        amount:-threshold,
+
+        date:new Date()
+            .toLocaleString(
+                "zh-TW"
+            )
+
+    });
+
+
+    saveStudents();
+
+    renderStudents();
+
+}
+
+
+/* =====================================================
+   新增學生
+===================================================== */
+
+function openAddStudentModal(){
+
+    document.getElementById(
+        "newStudentId"
+    ).value = "";
+
+
+    document.getElementById(
+        "newStudentName"
+    ).value = "";
+
+
+    document.getElementById(
+        "newStudentGrade"
+    ).value =
+        currentGrade;
+
+
+    document
+        .getElementById(
+            "addStudentModal"
+        )
+        .classList.add("show");
+
+}
+
+
+function addStudent(){
+
+    const id =
+        document.getElementById(
+            "newStudentId"
+        ).value.trim();
+
+
+    const name =
+        document.getElementById(
+            "newStudentName"
+        ).value.trim();
+
+
+    const grade =
+        Number(
+            document.getElementById(
+                "newStudentGrade"
+            ).value
+        );
+
+
+    if(!id || !name){
+
+        alert(
+            "請輸入座號與學生姓名。"
+        );
+
+        return;
+
+    }
+
+
+    const exists =
+        students.some(
+            student =>
+                student.grade === grade &&
+                student.id === id
+        );
+
+
+    if(exists){
+
+        alert(
+            "這個年級已經有相同座號的學生。"
+        );
+
+        return;
+
+    }
+
+
+    students.push({
+
+        id:id,
+
+        name:name,
+
+        grade:grade,
+
+        miles:0,
+
+        history:[]
+
+    });
+
+
+    saveStudents();
+
+    closeModal(
+        "addStudentModal"
+    );
+
+    setGrade(grade);
+
+}
+
+
+/* =====================================================
+   歷史紀錄
+===================================================== */
+
+function openHistory(studentId){
+
+    const student =
+        students.find(
+            s => s.id === studentId
+        );
+
+
+    if(!student) return;
+
+
+    document.getElementById(
+        "historyTitle"
+    ).textContent =
+        `📖 ${student.name} 的飛行紀錄`;
+
+
+    const content =
+        document.getElementById(
+            "historyContent"
+        );
+
+
+    if(
+        !student.history ||
+        student.history.length === 0
+    ){
+
+        content.innerHTML = `
+
+            <div class="empty">
+
+                目前還沒有紀錄。
+
+            </div>
+
+        `;
+
+    }
+
+    else{
+
+        content.innerHTML =
+            student.history
+                .map(item => {
+
+                    const amountText =
+                        item.amount > 0
+                        ? `+${item.amount} Miles`
+                        : `${item.amount} Miles`;
+
+
+                    return `
+
+                        <div
+                            class="history-item">
+
+                            <div>
+                                ${item.type}
+                            </div>
+
+                            <div
+                                class="history-mile">
+
+                                ${amountText}
+
+                            </div>
+
+                            <div
+                                class="history-date">
+
+                                ${item.date}
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                })
+                .join("");
+
+    }
+
+
+    document
+        .getElementById(
+            "historyModal"
+        )
+        .classList.add("show");
+
+}
+
+
+/* =====================================================
+   Modal
+===================================================== */
+
+function closeModal(id){
+
+    document
+        .getElementById(id)
+        .classList.remove("show");
+
+}
+
+
+document
+    .querySelectorAll(".modal")
+    .forEach(modal => {
+
+        modal.addEventListener(
+            "click",
+            function(event){
+
+                if(
+                    event.target === modal
+                ){
+
+                    modal.classList.remove(
+                        "show"
+                    );
+
+                }
+
+            }
+        );
+
+    });
+
+
+/* =====================================================
+   啟動
+===================================================== */
+
+init();
+
+</script>
+
+</body>
+</html>
