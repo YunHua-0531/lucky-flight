@@ -529,7 +529,7 @@
     const firebaseConfig = {
 
         apiKey:
-            "AIzaSyCF5oYAL83XW2Fa5hvdMYduKFj2gvDv1zA",
+            "AIzaSyCF5oYAL83XW2Fa5hvdMYduKF2W9WENH9",
 
         authDomain:
             "lucke-flight.firebaseapp.com",
@@ -716,7 +716,7 @@
                 console.error(error);
 
                 loginMessage.textContent =
-                    "登入失敗，請確認帳號與密碼。";
+                    "登入失敗，請確認電子郵件與密碼。";
 
             }
 
@@ -833,7 +833,7 @@
 
 
                             /*
-                             * 網站使用的學生資料
+                             * 學生資料
                              */
 
                             id:
@@ -970,7 +970,7 @@
                 student => {
 
                     /*
-                     * 年級符合
+                     * 年級
                      */
 
                     const sameGrade =
@@ -981,7 +981,7 @@
 
 
                     /*
-                     * 搜尋符合
+                     * 搜尋
                      */
 
                     const keyword =
@@ -1017,9 +1017,7 @@
             );
 
 
-        /*
-         * 沒有學生
-         */
+        /* 沒有學生 */
 
         if (
             filteredStudents.length === 0
@@ -1050,10 +1048,11 @@
                     student => {
 
                         /*
-                         * 抽獎所需 Miles
+                         * 三、四年級：
+                         * 30 Miles
                          *
-                         * 三、四年級：30
-                         * 六年級：80
+                         * 六年級：
+                         * 80 Miles
                          */
 
                         const drawCost =
@@ -1063,7 +1062,7 @@
 
 
                         /*
-                         * 計算目前可以抽幾次
+                         * 計算可抽獎次數
                          */
 
                         const tickets =
@@ -1178,7 +1177,7 @@
 
 
         /*
-         * 綁定學生卡片按鈕
+         * 綁定按鈕
          */
 
         studentList
@@ -1230,13 +1229,28 @@
 
 
                         /*
-                         * 其他功能
+                         * 🎫 使用一次
+                         */
+
+                        else if (
+                            action === "draw"
+                        ) {
+
+                            useOneDraw(
+                                firestoreId
+                            );
+
+                        }
+
+
+                        /*
+                         * 歷史紀錄
                          */
 
                         else {
 
                             alert(
-                                "這個功能下一階段再接上 Firebase。"
+                                "歷史紀錄功能下一階段再接上 Firebase。"
                             );
 
                         }
@@ -1280,7 +1294,7 @@
 
 
         /*
-         * 記錄目前是增加還是扣除
+         * 記錄增加／扣除
          */
 
         milesMode =
@@ -1288,7 +1302,7 @@
 
 
         /*
-         * 修改視窗標題
+         * 標題
          */
 
         if (
@@ -1329,10 +1343,6 @@
             "flex";
 
 
-        /*
-         * 自動選取輸入框
-         */
-
         milesInput.focus();
 
     }
@@ -1358,7 +1368,7 @@
 
 
     /* =========================
-       確定增加／扣除 Miles
+       增加／扣除 Miles
     ========================= */
 
     confirmMilesBtn.addEventListener(
@@ -1366,7 +1376,7 @@
         async () => {
 
             /*
-             * 確認是否有學生
+             * 確認學生
              */
 
             if (
@@ -1389,7 +1399,7 @@
 
 
             /*
-             * 檢查輸入
+             * 檢查數字
              */
 
             if (
@@ -1409,8 +1419,7 @@
 
 
             /*
-             * 如果是扣除 Miles
-             * 先確認餘額
+             * 扣除時確認餘額
              */
 
             if (
@@ -1434,7 +1443,7 @@
             try {
 
                 /*
-                 * 暫時停用按鈕
+                 * 防止重複按
                  */
 
                 confirmMilesBtn.disabled =
@@ -1446,7 +1455,7 @@
 
 
                 /*
-                 * 找到 Firestore 文件
+                 * Firestore 文件
                  */
 
                 const studentRef =
@@ -1458,7 +1467,7 @@
 
 
                 /*
-                 * 判斷增加還是扣除
+                 * 增加或扣除
                  */
 
                 const change =
@@ -1497,15 +1506,11 @@
 
 
                 /*
-                 * 重新從 Firestore 讀取
+                 * 重新讀取
                  */
 
                 await loadStudentsFromFirestore();
 
-
-                /*
-                 * 成功提示
-                 */
 
                 alert(
                     "✅ Miles 已成功更新！"
@@ -1539,6 +1544,159 @@
 
         }
     );
+
+
+    /* =========================
+       🎫 使用一次
+    ========================= */
+
+    async function useOneDraw(
+        firestoreId
+    ) {
+
+        /*
+         * 找到學生
+         */
+
+        const student =
+            students.find(
+                item =>
+                    item.firestoreId ===
+                    firestoreId
+            );
+
+
+        if (
+            !student
+        ) {
+
+            return;
+
+        }
+
+
+        /*
+         * 根據年級決定一次抽獎所需 Miles
+         *
+         * 三年級：30
+         * 四年級：30
+         * 六年級：80
+         */
+
+        const drawCost =
+            Number(student.grade) === 6
+                ? 80
+                : 30;
+
+
+        /*
+         * 確認 Miles 是否足夠
+         */
+
+        if (
+            student.miles <
+            drawCost
+        ) {
+
+            alert(
+
+                `Miles 不足！\n\n` +
+                `${student.name} 目前有 ${student.miles} Miles。\n` +
+                `本次需要 ${drawCost} Miles。`
+
+            );
+
+            return;
+
+        }
+
+
+        /*
+         * 確認扣除
+         */
+
+        const confirmed =
+            confirm(
+
+                `確定要讓 ${student.name} 使用一次抽獎資格嗎？\n\n` +
+                `將扣除 ${drawCost} Miles。\n` +
+                `目前：${student.miles} Miles\n` +
+                `使用後：${student.miles - drawCost} Miles`
+
+            );
+
+
+        if (
+            !confirmed
+        ) {
+
+            return;
+
+        }
+
+
+        try {
+
+            /*
+             * 找 Firestore 文件
+             */
+
+            const studentRef =
+                doc(
+                    db,
+                    "students",
+                    student.firestoreId
+                );
+
+
+            /*
+             * 扣除抽獎所需 Miles
+             */
+
+            await updateDoc(
+                studentRef,
+                {
+
+                    miles:
+                        increment(
+                            -drawCost
+                        )
+
+                }
+            );
+
+
+            /*
+             * 更新完成
+             */
+
+            await loadStudentsFromFirestore();
+
+
+            alert(
+
+                `🎫 抽獎資格使用成功！\n\n` +
+                `已扣除 ${drawCost} Miles。`
+
+            );
+
+
+        }
+        catch (error) {
+
+            console.error(
+                "使用抽獎資格失敗：",
+                error
+            );
+
+
+            alert(
+                "❌ 使用抽獎資格失敗，請查看瀏覽器主控台。"
+            );
+
+        }
+
+    }
 
 
     /* =========================
