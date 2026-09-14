@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -27,10 +28,6 @@ body{
     background:#f4f7fb;
     color:#243447;
 }
-
-/* =========================
-   Header
-========================= */
 
 header{
     background:linear-gradient(
@@ -76,7 +73,7 @@ header p{
     padding:13px;
     border:1px solid #ddd;
     border-radius:10px;
-    margin:12px 0;
+    margin:8px 0;
     font-size:16px;
 }
 
@@ -90,19 +87,11 @@ header p{
     font-size:16px;
 }
 
-/* =========================
-   Container
-========================= */
-
 .container{
     max-width:1100px;
     margin:auto;
     padding:25px 18px;
 }
-
-/* =========================
-   Top
-========================= */
 
 .topbar{
     display:flex;
@@ -120,10 +109,6 @@ header p{
     border-radius:10px;
     cursor:pointer;
 }
-
-/* =========================
-   Grade
-========================= */
 
 .grade-buttons{
     display:flex;
@@ -146,10 +131,6 @@ header p{
     background:#4b6cb7;
     color:white;
 }
-
-/* =========================
-   Toolbar
-========================= */
 
 .toolbar{
     display:flex;
@@ -175,10 +156,6 @@ header p{
     border-radius:10px;
     cursor:pointer;
 }
-
-/* =========================
-   Cards
-========================= */
 
 .student-grid{
     display:grid;
@@ -267,10 +244,6 @@ header p{
     background:#eef2f7;
 }
 
-/* =========================
-   Modal
-========================= */
-
 .modal{
     display:none;
     position:fixed;
@@ -333,10 +306,6 @@ header p{
     color:white;
 }
 
-/* =========================
-   History
-========================= */
-
 .history-item{
     border-bottom:1px solid #eee;
     padding:12px 0;
@@ -356,10 +325,6 @@ header p{
     font-weight:bold;
     margin-top:3px;
 }
-
-/* =========================
-   Empty
-========================= */
 
 .empty{
     text-align:center;
@@ -385,7 +350,6 @@ header p{
 
 <body>
 
-
 <header>
 
     <h1>✈️ Lucky Flight</h1>
@@ -410,21 +374,22 @@ header p{
     </h2>
 
     <p>
-        請輸入教師密碼
+        請使用教師帳號登入
     </p>
+
+    <input
+        type="email"
+        id="email"
+        placeholder="教師 Email">
 
     <input
         type="password"
         id="password"
-        placeholder="教師密碼"
-        onkeydown="
-            if(event.key==='Enter')
-            teacherLogin();
-        ">
+        placeholder="教師密碼">
 
     <button
         class="primary-btn"
-        onclick="teacherLogin()">
+        id="loginBtn">
 
         登入
 
@@ -443,7 +408,6 @@ header p{
 
     <div class="container">
 
-
         <div class="topbar">
 
             <h2 style="margin:0;">
@@ -452,7 +416,7 @@ header p{
 
             <button
                 class="logout"
-                onclick="teacherLogout()">
+                id="logoutBtn">
 
                 登出
 
@@ -461,55 +425,32 @@ header p{
         </div>
 
 
-        <!-- Grade -->
-
         <div class="grade-buttons">
 
-            <button
-                id="grade3Btn"
-                onclick="setGrade(3)">
-
+            <button id="grade3Btn">
                 三年級
-
             </button>
 
-
-            <button
-                id="grade4Btn"
-                onclick="setGrade(4)">
-
+            <button id="grade4Btn">
                 四年級
-
             </button>
 
-
-            <button
-                id="grade6Btn"
-                onclick="setGrade(6)">
-
+            <button id="grade6Btn">
                 六年級
-
             </button>
 
         </div>
 
-
-        <!-- Toolbar -->
 
         <div class="toolbar">
 
             <input
                 type="text"
                 id="searchInput"
-                placeholder="🔍 搜尋姓名或座號"
-                oninput="renderStudents()">
+                placeholder="🔍 搜尋姓名或座號">
 
-
-            <button
-                onclick="openAddStudentModal()">
-
+            <button id="addStudentBtn">
                 ＋ 新增學生
-
             </button>
 
         </div>
@@ -519,7 +460,6 @@ header p{
             id="studentGrid"
             class="student-grid">
         </div>
-
 
     </div>
 
@@ -540,9 +480,7 @@ header p{
             ＋ 增加 Miles
         </h2>
 
-        <p id="milesModalStudent">
-        </p>
-
+        <p id="milesModalStudent"></p>
 
         <select id="mileAmount">
 
@@ -572,7 +510,6 @@ header p{
 
         </select>
 
-
         <input
             type="number"
             id="customMiles"
@@ -581,23 +518,19 @@ header p{
             placeholder="請輸入 Miles"
             style="display:none;">
 
-
         <div class="modal-buttons">
 
             <button
                 class="cancel-btn"
-                onclick="
-                    closeModal('milesModal')
-                ">
+                id="cancelMilesBtn">
 
                 取消
 
             </button>
 
-
             <button
                 class="confirm-btn"
-                onclick="confirmMiles()">
+                id="confirmMilesBtn">
 
                 確定
 
@@ -624,18 +557,15 @@ header p{
             ＋ 新增學生
         </h2>
 
-
         <input
             type="text"
             id="newStudentId"
             placeholder="座號，例如：01">
 
-
         <input
             type="text"
             id="newStudentName"
             placeholder="學生姓名">
-
 
         <select id="newStudentGrade">
 
@@ -653,23 +583,19 @@ header p{
 
         </select>
 
-
         <div class="modal-buttons">
 
             <button
                 class="cancel-btn"
-                onclick="
-                    closeModal('addStudentModal')
-                ">
+                id="cancelAddStudentBtn">
 
                 取消
 
             </button>
 
-
             <button
                 class="confirm-btn"
-                onclick="addStudent()">
+                id="confirmAddStudentBtn">
 
                 新增
 
@@ -696,18 +622,13 @@ header p{
             📖 飛行紀錄
         </h2>
 
-
-        <div id="historyContent">
-        </div>
-
+        <div id="historyContent"></div>
 
         <div class="modal-buttons">
 
             <button
                 class="cancel-btn"
-                onclick="
-                    closeModal('historyModal')
-                ">
+                id="closeHistoryBtn">
 
                 關閉
 
@@ -720,7 +641,61 @@ header p{
 </div>
 
 
-<script>
+<!-- =====================================================
+     FIREBASE + APP
+===================================================== -->
+
+<script type="module">
+
+/* =====================================================
+   Firebase
+===================================================== */
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+import {
+    getAuth,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+
+const firebaseConfig = {
+
+    apiKey:
+        "AIzaSyCF5oYAL83XW2Fa5hvdMYduKFj2gvDv1zA",
+
+    authDomain:
+        "lucke-flight.firebaseapp.com",
+
+    projectId:
+        "lucke-flight",
+
+    storageBucket:
+        "lucke-flight.firebasestorage.app",
+
+    messagingSenderId:
+        "682813117774",
+
+    appId:
+        "1:682813117774:web:ff379b46474d755d513a1f",
+
+    measurementId:
+        "G-45JZ9WENH9"
+
+};
+
+
+const app =
+    initializeApp(firebaseConfig);
+
+
+const auth =
+    getAuth(app);
+
 
 /* =====================================================
    基本設定
@@ -744,14 +719,6 @@ const gradeRules = {
     }
 
 };
-
-
-/*
-   測試版教師密碼
-   正式版會改成 Firebase Authentication
-*/
-
-const TEACHER_PASSWORD = "1234";
 
 
 let students =
@@ -784,7 +751,7 @@ function saveStudents(){
 
 
 /* =====================================================
-   初始化資料
+   初始化測試資料
 ===================================================== */
 
 function init(){
@@ -823,28 +790,33 @@ function init(){
 
     }
 
-
     setGrade(3);
 
 }
 
 
 /* =====================================================
-   登入
+   Firebase 登入
 ===================================================== */
 
-function teacherLogin(){
+async function teacherLogin(){
+
+    const email =
+        document
+            .getElementById("email")
+            .value
+            .trim();
 
     const password =
-        document.getElementById(
-            "password"
-        ).value;
+        document
+            .getElementById("password")
+            .value;
 
 
-    if(password !== TEACHER_PASSWORD){
+    if(!email || !password){
 
         alert(
-            "教師密碼錯誤。"
+            "請輸入教師 Email 與密碼。"
         );
 
         return;
@@ -852,36 +824,98 @@ function teacherLogin(){
     }
 
 
-    document.getElementById(
-        "loginBox"
-    ).style.display = "none";
+    try{
 
+        await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+        );
 
-    document.getElementById(
-        "dashboard"
-    ).style.display = "block";
+    }
 
+    catch(error){
 
-    renderStudents();
+        console.error(
+            "Firebase Login Error:",
+            error
+        );
+
+        alert(
+            "登入失敗，請確認 Email 與密碼。"
+        );
+
+    }
 
 }
 
 
-function teacherLogout(){
+/* =====================================================
+   Firebase 登入狀態
+===================================================== */
 
-    document.getElementById(
-        "dashboard"
-    ).style.display = "none";
+onAuthStateChanged(
+    auth,
+    user => {
+
+        if(user){
+
+            document
+                .getElementById(
+                    "loginBox"
+                )
+                .style.display = "none";
 
 
-    document.getElementById(
-        "loginBox"
-    ).style.display = "block";
+            document
+                .getElementById(
+                    "dashboard"
+                )
+                .style.display = "block";
 
 
-    document.getElementById(
-        "password"
-    ).value = "";
+            renderStudents();
+
+        }
+
+        else{
+
+            document
+                .getElementById(
+                    "loginBox"
+                )
+                .style.display = "block";
+
+
+            document
+                .getElementById(
+                    "dashboard"
+                )
+                .style.display = "none";
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   登出
+===================================================== */
+
+async function teacherLogout(){
+
+    try{
+
+        await signOut(auth);
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+    }
 
 }
 
@@ -1113,15 +1147,10 @@ function renderStudents(){
                         <div
                             class="card-buttons">
 
-
                             <button
                                 class="add-btn"
-                                onclick="
-                                    openMilesModal(
-                                        '${student.id}',
-                                        'add'
-                                    )
-                                ">
+                                data-action="add"
+                                data-id="${student.id}">
 
                                 ＋ Miles
 
@@ -1130,12 +1159,8 @@ function renderStudents(){
 
                             <button
                                 class="minus-btn"
-                                onclick="
-                                    openMilesModal(
-                                        '${student.id}',
-                                        'minus'
-                                    )
-                                ">
+                                data-action="minus"
+                                data-id="${student.id}">
 
                                 − Miles
 
@@ -1144,11 +1169,8 @@ function renderStudents(){
 
                             <button
                                 class="use-btn"
-                                onclick="
-                                    useTicket(
-                                        '${student.id}'
-                                    )
-                                ">
+                                data-action="ticket"
+                                data-id="${student.id}">
 
                                 🎫 使用一次
 
@@ -1157,11 +1179,8 @@ function renderStudents(){
 
                             <button
                                 class="history-btn"
-                                onclick="
-                                    openHistory(
-                                        '${student.id}'
-                                    )
-                                ">
+                                data-action="history"
+                                data-id="${student.id}">
 
                                 📖 飛行紀錄
 
@@ -1703,6 +1722,210 @@ function closeModal(id){
 }
 
 
+/* =====================================================
+   按鈕事件
+===================================================== */
+
+document
+    .getElementById("loginBtn")
+    .addEventListener(
+        "click",
+        teacherLogin
+    );
+
+
+document
+    .getElementById("logoutBtn")
+    .addEventListener(
+        "click",
+        teacherLogout
+    );
+
+
+document
+    .getElementById("grade3Btn")
+    .addEventListener(
+        "click",
+        () => setGrade(3)
+    );
+
+
+document
+    .getElementById("grade4Btn")
+    .addEventListener(
+        "click",
+        () => setGrade(4)
+    );
+
+
+document
+    .getElementById("grade6Btn")
+    .addEventListener(
+        "click",
+        () => setGrade(6)
+    );
+
+
+document
+    .getElementById("searchInput")
+    .addEventListener(
+        "input",
+        renderStudents
+    );
+
+
+document
+    .getElementById("addStudentBtn")
+    .addEventListener(
+        "click",
+        openAddStudentModal
+    );
+
+
+document
+    .getElementById("cancelMilesBtn")
+    .addEventListener(
+        "click",
+        () => closeModal("milesModal")
+    );
+
+
+document
+    .getElementById("confirmMilesBtn")
+    .addEventListener(
+        "click",
+        confirmMiles
+    );
+
+
+document
+    .getElementById("cancelAddStudentBtn")
+    .addEventListener(
+        "click",
+        () => closeModal("addStudentModal")
+    );
+
+
+document
+    .getElementById("confirmAddStudentBtn")
+    .addEventListener(
+        "click",
+        addStudent
+    );
+
+
+document
+    .getElementById("closeHistoryBtn")
+    .addEventListener(
+        "click",
+        () => closeModal("historyModal")
+    );
+
+
+/* =========================
+   Enter 登入
+========================= */
+
+document
+    .getElementById("email")
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if(event.key === "Enter"){
+
+                teacherLogin();
+
+            }
+
+        }
+    );
+
+
+document
+    .getElementById("password")
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if(event.key === "Enter"){
+
+                teacherLogin();
+
+            }
+
+        }
+    );
+
+
+/* =========================
+   卡片按鈕
+========================= */
+
+document
+    .getElementById("studentGrid")
+    .addEventListener(
+        "click",
+        event => {
+
+            const button =
+                event.target.closest(
+                    "button[data-action]"
+                );
+
+
+            if(!button) return;
+
+
+            const id =
+                button.dataset.id;
+
+
+            const action =
+                button.dataset.action;
+
+
+            if(action === "add"){
+
+                openMilesModal(
+                    id,
+                    "add"
+                );
+
+            }
+
+
+            if(action === "minus"){
+
+                openMilesModal(
+                    id,
+                    "minus"
+                );
+
+            }
+
+
+            if(action === "ticket"){
+
+                useTicket(id);
+
+            }
+
+
+            if(action === "history"){
+
+                openHistory(id);
+
+            }
+
+        }
+    );
+
+
+/* =========================
+   點背景關閉 Modal
+========================= */
+
 document
     .querySelectorAll(".modal")
     .forEach(modal => {
@@ -1737,3 +1960,4 @@ init();
 
 </body>
 </html>
+```
