@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Lucky Flight 教師管理</title>
 
     <style>
@@ -58,7 +59,8 @@
             margin-top: 0;
         }
 
-        input {
+        input,
+        select {
             width: 100%;
             padding: 12px;
             margin: 8px 0;
@@ -108,6 +110,10 @@
             gap: 15px;
             flex-wrap: wrap;
             margin-bottom: 20px;
+        }
+
+        .top-bar h2 {
+            margin-bottom: 5px;
         }
 
         .logout-btn {
@@ -239,6 +245,7 @@
             text-align: center;
             padding: 30px;
             color: #777;
+            grid-column: 1 / -1;
         }
 
         /* =========================
@@ -282,6 +289,12 @@
         .confirm-btn {
             background: #1e3a5f;
             color: white;
+        }
+
+        .add-student-info {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -479,6 +492,76 @@
 
 
 <!-- =========================
+     新增學生 Modal
+========================= -->
+
+<div
+    class="modal"
+    id="addStudentModal"
+>
+
+    <div class="modal-content">
+
+        <h3>
+            ＋ 新增學生
+        </h3>
+
+        <div class="add-student-info">
+            新增後 Miles 將從 0 開始。
+        </div>
+
+        <input
+            type="text"
+            id="newStudentId"
+            placeholder="座號，例如：01"
+        >
+
+        <input
+            type="text"
+            id="newStudentName"
+            placeholder="學生姓名"
+        >
+
+        <select id="newStudentGrade">
+
+            <option value="3">
+                三年級
+            </option>
+
+            <option value="4">
+                四年級
+            </option>
+
+            <option value="6">
+                六年級
+            </option>
+
+        </select>
+
+        <div class="modal-buttons">
+
+            <button
+                class="cancel-btn"
+                id="cancelAddStudentBtn"
+            >
+                取消
+            </button>
+
+            <button
+                class="confirm-btn"
+                id="confirmAddStudentBtn"
+            >
+                建立學生
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
      Firebase
 ========================= -->
 
@@ -515,6 +598,7 @@
         getFirestore,
         collection,
         getDocs,
+        addDoc,
         doc,
         updateDoc,
         increment
@@ -524,31 +608,17 @@
 
     /* =========================
        Firebase 設定
+       這裡請不要修改
     ========================= */
 
     const firebaseConfig = {
-
-        apiKey:
-            "AIzaSyCF5oYAL83XW2Fa5hvdMYduKFj2gvDv1zA",
-
-        authDomain:
-            "lucke-flight.firebaseapp.com",
-
-        projectId:
-            "lucke-flight",
-
-        storageBucket:
-            "lucke-flight.firebasestorage.app",
-
-        messagingSenderId:
-            "682813117774",
-
-        appId:
-            "1:682813117774:web:ff379b46474d755d513a1f",
-
-        measurementId:
-            "G-45JZ9WENH9"
-
+        apiKey: "AIzaSyCF5oYAL83XW2Fa5hvdMYduKFj2gvDv1zA",
+        authDomain: "lucke-flight.firebaseapp.com",
+        projectId: "lucke-flight",
+        storageBucket: "lucke-flight.firebasestorage.app",
+        messagingSenderId: "682813117774",
+        appId: "1:682813117774:web:ff379b46474d755d513a1f",
+        measurementId: "G-45JZ9WENH9"
     };
 
 
@@ -559,10 +629,8 @@
     const app =
         initializeApp(firebaseConfig);
 
-
     const auth =
         getAuth(app);
-
 
     const db =
         getFirestore(app);
@@ -592,42 +660,35 @@
             "loginSection"
         );
 
-
     const dashboard =
         document.getElementById(
             "dashboard"
         );
-
 
     const loginBtn =
         document.getElementById(
             "loginBtn"
         );
 
-
     const logoutBtn =
         document.getElementById(
             "logoutBtn"
         );
-
 
     const loginMessage =
         document.getElementById(
             "loginMessage"
         );
 
-
     const teacherEmail =
         document.getElementById(
             "teacherEmail"
         );
 
-
     const searchInput =
         document.getElementById(
             "searchInput"
         );
-
 
     const studentList =
         document.getElementById(
@@ -635,27 +696,68 @@
         );
 
 
+    /* =========================
+       Miles Modal 元件
+    ========================= */
+
     const milesModal =
         document.getElementById(
             "milesModal"
         );
-
 
     const milesInput =
         document.getElementById(
             "milesInput"
         );
 
-
     const confirmMilesBtn =
         document.getElementById(
             "confirmMilesBtn"
         );
 
-
     const cancelMilesBtn =
         document.getElementById(
             "cancelMilesBtn"
+        );
+
+
+    /* =========================
+       新增學生 Modal 元件
+    ========================= */
+
+    const addStudentModal =
+        document.getElementById(
+            "addStudentModal"
+        );
+
+    const addStudentBtn =
+        document.getElementById(
+            "addStudentBtn"
+        );
+
+    const cancelAddStudentBtn =
+        document.getElementById(
+            "cancelAddStudentBtn"
+        );
+
+    const confirmAddStudentBtn =
+        document.getElementById(
+            "confirmAddStudentBtn"
+        );
+
+    const newStudentId =
+        document.getElementById(
+            "newStudentId"
+        );
+
+    const newStudentName =
+        document.getElementById(
+            "newStudentName"
+        );
+
+    const newStudentGrade =
+        document.getElementById(
+            "newStudentGrade"
         );
 
 
@@ -673,7 +775,6 @@
                     .value
                     .trim();
 
-
             const password =
                 document
                     .getElementById("password")
@@ -689,7 +790,6 @@
                     "請輸入電子郵件與密碼。";
 
                 return;
-
             }
 
 
@@ -709,11 +809,13 @@
                 loginMessage.textContent =
                     "";
 
-
             }
             catch (error) {
 
-                console.error(error);
+                console.error(
+                    "登入錯誤：",
+                    error
+                );
 
                 loginMessage.textContent =
                     "登入失敗，請確認電子郵件與密碼。";
@@ -751,30 +853,21 @@
                 loginSection.style.display =
                     "none";
 
-
                 dashboard.style.display =
                     "block";
-
 
                 teacherEmail.textContent =
                     "目前登入：" +
                     user.email;
 
 
-                /*
-                 * 登入成功後
-                 * 從 Firestore 讀取學生
-                 */
-
                 await loadStudentsFromFirestore();
-
 
             }
             else {
 
                 loginSection.style.display =
                     "block";
-
 
                 dashboard.style.display =
                     "none";
@@ -824,33 +917,20 @@
 
                         return {
 
-                            /*
-                             * Firestore 文件 ID
-                             */
-
                             firestoreId:
                                 docSnap.id,
-
-
-                            /*
-                             * 學生資料
-                             */
 
                             id:
                                 data.studentId,
 
-
                             name:
                                 data.name,
-
 
                             grade:
                                 data.grade,
 
-
                             miles:
                                 data.miles || 0,
-
 
                             history:
                                 data.history || []
@@ -868,7 +948,6 @@
 
 
             renderStudents();
-
 
         }
         catch (error) {
@@ -960,6 +1039,19 @@
 
 
     /* =========================
+       取得抽獎所需 Miles
+    ========================= */
+
+    function getDrawCost(grade) {
+
+        return Number(grade) === 6
+            ? 80
+            : 30;
+
+    }
+
+
+    /* =========================
        顯示學生
     ========================= */
 
@@ -969,20 +1061,12 @@
             students.filter(
                 student => {
 
-                    /*
-                     * 年級
-                     */
-
                     const sameGrade =
                         Number(
                             student.grade
                         ) ===
                         currentGrade;
 
-
-                    /*
-                     * 搜尋
-                     */
 
                     const keyword =
                         currentSearch;
@@ -1017,8 +1101,6 @@
             );
 
 
-        /* 沒有學生 */
-
         if (
             filteredStudents.length === 0
         ) {
@@ -1038,32 +1120,16 @@
         }
 
 
-        /*
-         * 建立學生卡片
-         */
-
         studentList.innerHTML =
             filteredStudents
                 .map(
                     student => {
 
-                        /*
-                         * 三、四年級：
-                         * 30 Miles
-                         *
-                         * 六年級：
-                         * 80 Miles
-                         */
-
                         const drawCost =
-                            currentGrade === 6
-                                ? 80
-                                : 30;
+                            getDrawCost(
+                                student.grade
+                            );
 
-
-                        /*
-                         * 計算可抽獎次數
-                         */
 
                         const tickets =
                             Math.floor(
@@ -1081,40 +1147,32 @@
                                 <div
                                     class="student-name"
                                 >
-
                                     ${student.name}
-
                                 </div>
 
 
                                 <div
                                     class="student-info"
                                 >
-
                                     座號：
                                     ${student.id}
-
                                 </div>
 
 
                                 <div
                                     class="miles"
                                 >
-
                                     ${student.miles}
                                     Miles
-
                                 </div>
 
 
                                 <div
                                     class="tickets"
                                 >
-
                                     🎫 可抽獎
                                     ${tickets}
                                     次
-
                                 </div>
 
 
@@ -1127,9 +1185,7 @@
                                         data-action="plus"
                                         data-id="${student.firestoreId}"
                                     >
-
                                         ＋ Miles
-
                                     </button>
 
 
@@ -1138,9 +1194,7 @@
                                         data-action="minus"
                                         data-id="${student.firestoreId}"
                                     >
-
                                         − Miles
-
                                     </button>
 
 
@@ -1149,9 +1203,7 @@
                                         data-action="draw"
                                         data-id="${student.firestoreId}"
                                     >
-
                                         🎫 使用一次
-
                                     </button>
 
 
@@ -1160,9 +1212,7 @@
                                         data-action="history"
                                         data-id="${student.firestoreId}"
                                     >
-
                                         📋 紀錄
-
                                     </button>
 
                                 </div>
@@ -1176,9 +1226,9 @@
                 .join("");
 
 
-        /*
-         * 綁定按鈕
-         */
+        /* =========================
+           綁定學生卡片按鈕
+        ========================= */
 
         studentList
             .querySelectorAll("button")
@@ -1191,14 +1241,9 @@
                         const action =
                             button.dataset.action;
 
-
                         const firestoreId =
                             button.dataset.id;
 
-
-                        /*
-                         * ＋ Miles
-                         */
 
                         if (
                             action === "plus"
@@ -1211,11 +1256,6 @@
 
                         }
 
-
-                        /*
-                         * − Miles
-                         */
-
                         else if (
                             action === "minus"
                         ) {
@@ -1227,11 +1267,6 @@
 
                         }
 
-
-                        /*
-                         * 🎫 使用一次
-                         */
-
                         else if (
                             action === "draw"
                         ) {
@@ -1241,11 +1276,6 @@
                             );
 
                         }
-
-
-                        /*
-                         * 歷史紀錄
-                         */
 
                         else {
 
@@ -1272,10 +1302,6 @@
         mode
     ) {
 
-        /*
-         * 找學生
-         */
-
         selectedStudent =
             students.find(
                 student =>
@@ -1293,17 +1319,9 @@
         }
 
 
-        /*
-         * 記錄增加／扣除
-         */
-
         milesMode =
             mode;
 
-
-        /*
-         * 標題
-         */
 
         if (
             mode === "plus"
@@ -1312,7 +1330,6 @@
             document.getElementById(
                 "milesModalTitle"
             ).textContent =
-
                 `增加 Miles｜${selectedStudent.name}`;
 
         }
@@ -1321,23 +1338,14 @@
             document.getElementById(
                 "milesModalTitle"
             ).textContent =
-
                 `扣除 Miles｜${selectedStudent.name}`;
 
         }
 
 
-        /*
-         * 清空輸入
-         */
-
         milesInput.value =
             "";
 
-
-        /*
-         * 顯示視窗
-         */
 
         milesModal.style.display =
             "flex";
@@ -1359,7 +1367,6 @@
             milesModal.style.display =
                 "none";
 
-
             selectedStudent =
                 null;
 
@@ -1375,10 +1382,6 @@
         "click",
         async () => {
 
-            /*
-             * 確認學生
-             */
-
             if (
                 !selectedStudent
             ) {
@@ -1388,19 +1391,11 @@
             }
 
 
-            /*
-             * 取得輸入數字
-             */
-
             const amount =
                 Number(
                     milesInput.value
                 );
 
-
-            /*
-             * 檢查數字
-             */
 
             if (
                 !Number.isFinite(
@@ -1417,10 +1412,6 @@
 
             }
 
-
-            /*
-             * 扣除時確認餘額
-             */
 
             if (
                 milesMode === "minus" &&
@@ -1442,21 +1433,12 @@
 
             try {
 
-                /*
-                 * 防止重複按
-                 */
-
                 confirmMilesBtn.disabled =
                     true;
-
 
                 confirmMilesBtn.textContent =
                     "儲存中……";
 
-
-                /*
-                 * Firestore 文件
-                 */
 
                 const studentRef =
                     doc(
@@ -1466,36 +1448,22 @@
                     );
 
 
-                /*
-                 * 增加或扣除
-                 */
-
                 const change =
                     milesMode === "plus"
                         ? amount
                         : -amount;
 
 
-                /*
-                 * 更新 Firestore
-                 */
-
                 await updateDoc(
                     studentRef,
                     {
-
                         miles:
                             increment(
                                 change
                             )
-
                     }
                 );
 
-
-                /*
-                 * 關閉視窗
-                 */
 
                 milesModal.style.display =
                     "none";
@@ -1505,17 +1473,12 @@
                     null;
 
 
-                /*
-                 * 重新讀取
-                 */
-
                 await loadStudentsFromFirestore();
 
 
                 alert(
                     "✅ Miles 已成功更新！"
                 );
-
 
             }
             catch (error) {
@@ -1536,7 +1499,6 @@
                 confirmMilesBtn.disabled =
                     false;
 
-
                 confirmMilesBtn.textContent =
                     "確定";
 
@@ -1553,10 +1515,6 @@
     async function useOneDraw(
         firestoreId
     ) {
-
-        /*
-         * 找到學生
-         */
 
         const student =
             students.find(
@@ -1575,23 +1533,11 @@
         }
 
 
-        /*
-         * 根據年級決定一次抽獎所需 Miles
-         *
-         * 三年級：30
-         * 四年級：30
-         * 六年級：80
-         */
-
         const drawCost =
-            Number(student.grade) === 6
-                ? 80
-                : 30;
+            getDrawCost(
+                student.grade
+            );
 
-
-        /*
-         * 確認 Miles 是否足夠
-         */
 
         if (
             student.miles <
@@ -1610,10 +1556,6 @@
 
         }
 
-
-        /*
-         * 確認扣除
-         */
 
         const confirmed =
             confirm(
@@ -1637,10 +1579,6 @@
 
         try {
 
-            /*
-             * 找 Firestore 文件
-             */
-
             const studentRef =
                 doc(
                     db,
@@ -1649,26 +1587,16 @@
                 );
 
 
-            /*
-             * 扣除抽獎所需 Miles
-             */
-
             await updateDoc(
                 studentRef,
                 {
-
                     miles:
                         increment(
                             -drawCost
                         )
-
                 }
             );
 
-
-            /*
-             * 更新完成
-             */
 
             await loadStudentsFromFirestore();
 
@@ -1679,7 +1607,6 @@
                 `已扣除 ${drawCost} Miles。`
 
             );
-
 
         }
         catch (error) {
@@ -1697,6 +1624,328 @@
         }
 
     }
+
+
+    /* =====================================================
+       新增學生
+    ===================================================== */
+
+
+    /* =========================
+       開啟新增學生視窗
+    ========================= */
+
+    addStudentBtn.addEventListener(
+        "click",
+        () => {
+
+            /*
+             * 清空欄位
+             */
+
+            newStudentId.value =
+                "";
+
+            newStudentName.value =
+                "";
+
+
+            /*
+             * 預設使用目前選擇的年級
+             */
+
+            newStudentGrade.value =
+                String(
+                    currentGrade
+                );
+
+
+            /*
+             * 顯示 Modal
+             */
+
+            addStudentModal.style.display =
+                "flex";
+
+
+            newStudentId.focus();
+
+        }
+    );
+
+
+    /* =========================
+       關閉新增學生視窗
+    ========================= */
+
+    cancelAddStudentBtn.addEventListener(
+        "click",
+        () => {
+
+            addStudentModal.style.display =
+                "none";
+
+        }
+    );
+
+
+    /* =========================
+       建立學生
+    ========================= */
+
+    confirmAddStudentBtn.addEventListener(
+        "click",
+        async () => {
+
+            /*
+             * 取得資料
+             */
+
+            const studentId =
+                newStudentId.value
+                    .trim();
+
+
+            const studentName =
+                newStudentName.value
+                    .trim();
+
+
+            const studentGrade =
+                Number(
+                    newStudentGrade.value
+                );
+
+
+            /* =========================
+               基本檢查
+            ========================= */
+
+            if (
+                !studentId
+            ) {
+
+                alert(
+                    "請輸入學生座號。"
+                );
+
+                newStudentId.focus();
+
+                return;
+
+            }
+
+
+            if (
+                !studentName
+            ) {
+
+                alert(
+                    "請輸入學生姓名。"
+                );
+
+                newStudentName.focus();
+
+                return;
+
+            }
+
+
+            if (
+                ![3, 4, 6]
+                    .includes(
+                        studentGrade
+                    )
+            ) {
+
+                alert(
+                    "請選擇三、四或六年級。"
+                );
+
+                return;
+
+            }
+
+
+            /* =========================
+               檢查同年級是否已有相同座號
+            ========================= */
+
+            const duplicate =
+                students.find(
+                    student =>
+
+                        Number(
+                            student.grade
+                        ) ===
+                        studentGrade &&
+
+                        String(
+                            student.id
+                        )
+                        .trim() ===
+                        studentId
+
+                );
+
+
+            if (
+                duplicate
+            ) {
+
+                alert(
+
+                    `⚠️ ${studentGrade} 年級已經有座號 ${studentId} 的學生。\n\n` +
+                    `學生姓名：${duplicate.name}`
+
+                );
+
+                return;
+
+            }
+
+
+            try {
+
+                /*
+                 * 防止重複點擊
+                 */
+
+                confirmAddStudentBtn.disabled =
+                    true;
+
+                confirmAddStudentBtn.textContent =
+                    "建立中……";
+
+
+                /* =========================
+                   寫入 Firestore
+                ========================= */
+
+                await addDoc(
+                    collection(
+                        db,
+                        "students"
+                    ),
+                    {
+
+                        studentId:
+                            studentId,
+
+                        name:
+                            studentName,
+
+                        grade:
+                            studentGrade,
+
+                        miles:
+                            0
+
+                    }
+                );
+
+
+                /* =========================
+                   關閉視窗
+                ========================= */
+
+                addStudentModal.style.display =
+                    "none";
+
+
+                /* =========================
+                   重新讀取學生
+                ========================= */
+
+                await loadStudentsFromFirestore();
+
+
+                /*
+                 * 如果新增的年級
+                 * 不是目前畫面年級
+                 * 自動切換到新增學生的年級
+                 */
+
+                if (
+                    currentGrade !==
+                    studentGrade
+                ) {
+
+                    currentGrade =
+                        studentGrade;
+
+
+                    document
+                        .querySelectorAll(
+                            ".grade-btn"
+                        )
+                        .forEach(btn => {
+
+                            btn.classList.remove(
+                                "active"
+                            );
+
+                        });
+
+
+                    const targetButton =
+                        document.querySelector(
+                            `[data-grade="${studentGrade}"]`
+                        );
+
+
+                    if (
+                        targetButton
+                    ) {
+
+                        targetButton.classList.add(
+                            "active"
+                        );
+
+                    }
+
+
+                    renderStudents();
+
+                }
+
+
+                alert(
+
+                    `✅ 學生新增成功！\n\n` +
+                    `座號：${studentId}\n` +
+                    `姓名：${studentName}\n` +
+                    `年級：${studentGrade} 年級\n` +
+                    `Miles：0`
+
+                );
+
+            }
+            catch (error) {
+
+                console.error(
+                    "新增學生失敗：",
+                    error
+                );
+
+
+                alert(
+                    "❌ 新增學生失敗，請查看瀏覽器主控台。"
+                );
+
+            }
+            finally {
+
+                confirmAddStudentBtn.disabled =
+                    false;
+
+                confirmAddStudentBtn.textContent =
+                    "建立學生";
+
+            }
+
+        }
+    );
 
 
     /* =========================
