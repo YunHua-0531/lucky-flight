@@ -1,464 +1,380 @@
-```html
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucky Flight 教師管理</title>
 
-<meta charset="UTF-8">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+        body {
+            margin: 0;
+            font-family: Arial, "Noto Sans TC", sans-serif;
+            background: #f4f7fb;
+            color: #333;
+        }
 
-<title>👩‍🏫 Lucky Flight 教師管理</title>
+        header {
+            background: linear-gradient(135deg, #1e3a5f, #3f6f9f);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
 
-<style>
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
 
-*{
-    box-sizing:border-box;
-}
+        header p {
+            margin: 6px 0 0;
+            opacity: 0.9;
+        }
 
-body{
-    margin:0;
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        "Noto Sans TC",
-        Arial,
-        sans-serif;
-    background:#f4f7fb;
-    color:#243447;
-}
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
 
-header{
-    background:linear-gradient(
-        135deg,
-        #182848,
-        #4b6cb7
-    );
-    color:white;
-    padding:25px 20px;
-    text-align:center;
-}
+        /* 登入區 */
+        #loginSection {
+            max-width: 400px;
+            margin: 80px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
 
-header h1{
-    margin:0;
-    font-size:27px;
-}
+        #loginSection h2 {
+            text-align: center;
+            margin-top: 0;
+        }
 
-header p{
-    margin:7px 0 0;
-    opacity:.9;
-}
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
 
-/* =========================
-   Login
-========================= */
+        button {
+            border: none;
+            border-radius: 8px;
+            padding: 10px 16px;
+            cursor: pointer;
+            font-size: 15px;
+        }
 
-.login-box{
-    max-width:420px;
-    margin:70px auto;
-    background:white;
-    padding:35px;
-    border-radius:20px;
-    box-shadow:0 5px 20px rgba(0,0,0,.08);
-    text-align:center;
-}
+        #loginBtn {
+            width: 100%;
+            background: #1e3a5f;
+            color: white;
+            margin-top: 10px;
+        }
 
-.login-box h2{
-    margin-top:0;
-}
+        #loginMessage {
+            color: #d33;
+            text-align: center;
+            margin-top: 12px;
+        }
 
-.login-box input{
-    width:100%;
-    padding:13px;
-    border:1px solid #ddd;
-    border-radius:10px;
-    margin:8px 0;
-    font-size:16px;
-}
+        /* 後台 */
+        #dashboard {
+            display: none;
+        }
 
-.primary-btn{
-    background:#4b6cb7;
-    color:white;
-    border:none;
-    padding:12px 20px;
-    border-radius:10px;
-    cursor:pointer;
-    font-size:16px;
-}
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
 
-.container{
-    max-width:1100px;
-    margin:auto;
-    padding:25px 18px;
-}
+        .logout-btn {
+            background: #777;
+            color: white;
+        }
 
-.topbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:20px;
-    gap:10px;
-}
+        .grade-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
 
-.logout{
-    background:#eee;
-    color:#333;
-    border:none;
-    padding:10px 16px;
-    border-radius:10px;
-    cursor:pointer;
-}
+        .grade-btn {
+            background: white;
+            border: 2px solid #d5dce5;
+        }
 
-.grade-buttons{
-    display:flex;
-    gap:10px;
-    margin-bottom:20px;
-}
+        .grade-btn.active {
+            background: #1e3a5f;
+            color: white;
+            border-color: #1e3a5f;
+        }
 
-.grade-buttons button{
-    flex:1;
-    border:none;
-    padding:13px;
-    border-radius:12px;
-    background:white;
-    cursor:pointer;
-    font-size:16px;
-    box-shadow:0 2px 8px rgba(0,0,0,.05);
-}
+        .search-area {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
 
-.grade-buttons button.active{
-    background:#4b6cb7;
-    color:white;
-}
+        .search-area input {
+            margin: 0;
+        }
 
-.toolbar{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-bottom:20px;
-}
+        .add-btn {
+            background: #2d8a57;
+            color: white;
+            white-space: nowrap;
+        }
 
-.toolbar input{
-    flex:1;
-    min-width:200px;
-    padding:12px;
-    border:1px solid #ddd;
-    border-radius:10px;
-    font-size:15px;
-}
+        #studentList {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 18px;
+        }
 
-.toolbar button{
-    border:none;
-    background:#4b6cb7;
-    color:white;
-    padding:12px 18px;
-    border-radius:10px;
-    cursor:pointer;
-}
+        .student-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
 
-.student-grid{
-    display:grid;
-    grid-template-columns:
-        repeat(auto-fill,minmax(290px,1fr));
-    gap:18px;
-}
+        .student-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
 
-.student-card{
-    background:white;
-    border-radius:18px;
-    padding:20px;
-    box-shadow:0 4px 15px rgba(0,0,0,.07);
-}
+        .student-info {
+            color: #777;
+            margin-bottom: 15px;
+        }
 
-.student-top{
-    display:flex;
-    justify-content:space-between;
-}
+        .miles {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1e5d91;
+            margin-bottom: 5px;
+        }
 
-.student-name{
-    font-size:21px;
-    font-weight:bold;
-}
+        .tickets {
+            margin-bottom: 15px;
+            color: #555;
+        }
 
-.student-grade{
-    color:#777;
-    font-size:13px;
-    margin-top:4px;
-}
+        .card-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
 
-.miles{
-    font-size:36px;
-    font-weight:bold;
-    margin:15px 0 5px;
-    color:#4b6cb7;
-}
+        .plus-btn {
+            background: #4caf50;
+            color: white;
+        }
 
-.miles-label{
-    color:#888;
-    font-size:13px;
-}
+        .minus-btn {
+            background: #e57373;
+            color: white;
+        }
 
-.ticket{
-    background:#f3f6fb;
-    border-radius:12px;
-    padding:12px;
-    margin:15px 0;
-}
+        .draw-btn {
+            background: #f0a500;
+            color: white;
+        }
 
-.ticket strong{
-    font-size:22px;
-}
+        .history-btn {
+            background: #607d8b;
+            color: white;
+        }
 
-.card-buttons{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:8px;
-}
+        .empty {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            color: #777;
+            grid-column: 1 / -1;
+        }
 
-.card-buttons button{
-    border:none;
-    padding:10px;
-    border-radius:9px;
-    cursor:pointer;
-}
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
 
-.add-btn{
-    background:#e6f6ec;
-    color:#237a42;
-}
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 450px;
+            border-radius: 16px;
+            padding: 25px;
+        }
 
-.minus-btn{
-    background:#fdeaea;
-    color:#a33;
-}
+        .modal-content h3 {
+            margin-top: 0;
+        }
 
-.use-btn{
-    grid-column:span 2;
-    background:#182848;
-    color:white;
-}
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 15px;
+        }
 
-.history-btn{
-    grid-column:span 2;
-    background:#eef2f7;
-}
+        .cancel-btn {
+            background: #ddd;
+        }
 
-.modal{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.45);
-    z-index:1000;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-}
+        .confirm-btn {
+            background: #1e3a5f;
+            color: white;
+        }
 
-.modal.show{
-    display:flex;
-}
+        .history-item {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
 
-.modal-box{
-    width:100%;
-    max-width:420px;
-    background:white;
-    border-radius:20px;
-    padding:25px;
-    max-height:90vh;
-    overflow:auto;
-}
-
-.modal-box h2{
-    margin-top:0;
-}
-
-.modal-box input,
-.modal-box select{
-    width:100%;
-    padding:12px;
-    margin:8px 0;
-    border:1px solid #ddd;
-    border-radius:10px;
-    font-size:15px;
-}
-
-.modal-buttons{
-    display:flex;
-    gap:10px;
-    margin-top:15px;
-}
-
-.modal-buttons button{
-    flex:1;
-    padding:12px;
-    border:none;
-    border-radius:10px;
-    cursor:pointer;
-}
-
-.cancel-btn{
-    background:#eee;
-}
-
-.confirm-btn{
-    background:#4b6cb7;
-    color:white;
-}
-
-.history-item{
-    border-bottom:1px solid #eee;
-    padding:12px 0;
-}
-
-.history-item:last-child{
-    border-bottom:none;
-}
-
-.history-date{
-    color:#888;
-    font-size:12px;
-    margin-top:3px;
-}
-
-.history-mile{
-    font-weight:bold;
-    margin-top:3px;
-}
-
-.empty{
-    text-align:center;
-    padding:50px;
-    color:#888;
-}
-
-@media(max-width:600px){
-
-    .topbar{
-        align-items:flex-start;
-    }
-
-    .student-grid{
-        grid-template-columns:1fr;
-    }
-
-}
-
-</style>
-
+        .loading {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+        }
+    </style>
 </head>
 
 <body>
 
 <header>
-
     <h1>✈️ Lucky Flight</h1>
-
-    <p>
-        👩‍🏫 教師智慧座艙
-    </p>
-
+    <p>👩‍🏫 教師智慧座艙</p>
 </header>
 
+<!-- ==================== 登入 ==================== -->
 
-<!-- =====================================================
-     LOGIN
-===================================================== -->
+<section id="loginSection">
 
-<div
-    id="loginBox"
-    class="login-box">
-
-    <h2>
-        👩‍🏫 教師管理登入
-    </h2>
-
-    <p>
-        請使用教師帳號登入
-    </p>
+    <h2>教師登入</h2>
 
     <input
         type="email"
         id="email"
-        placeholder="教師 Email">
+        placeholder="電子郵件地址"
+    >
 
     <input
         type="password"
         id="password"
-        placeholder="教師密碼">
+        placeholder="密碼"
+    >
 
-    <button
-        class="primary-btn"
-        id="loginBtn">
-
+    <button id="loginBtn">
         登入
-
     </button>
 
-</div>
+    <div id="loginMessage"></div>
+
+</section>
 
 
-<!-- =====================================================
-     DASHBOARD
-===================================================== -->
+<!-- ==================== 後台 ==================== -->
 
-<div
-    id="dashboard"
-    style="display:none;">
+<div id="dashboard">
 
     <div class="container">
 
-        <div class="topbar">
+        <div class="top-bar">
 
-            <h2 style="margin:0;">
-                ✈️ 智慧座艙
-            </h2>
+            <div>
+                <h2>教師智慧座艙</h2>
+                <div id="teacherEmail"></div>
+            </div>
 
             <button
-                class="logout"
-                id="logoutBtn">
-
+                class="logout-btn"
+                id="logoutBtn"
+            >
                 登出
-
             </button>
 
         </div>
 
 
+        <!-- 年級 -->
+
         <div class="grade-buttons">
 
-            <button id="grade3Btn">
+            <button
+                class="grade-btn"
+                data-grade="3"
+            >
                 三年級
             </button>
 
-            <button id="grade4Btn">
+            <button
+                class="grade-btn"
+                data-grade="4"
+            >
                 四年級
             </button>
 
-            <button id="grade6Btn">
+            <button
+                class="grade-btn"
+                data-grade="6"
+            >
                 六年級
             </button>
 
         </div>
 
 
-        <div class="toolbar">
+        <!-- 搜尋 -->
+
+        <div class="search-area">
 
             <input
                 type="text"
                 id="searchInput"
-                placeholder="🔍 搜尋姓名或座號">
+                placeholder="搜尋學生姓名或座號"
+            >
 
-            <button id="addStudentBtn">
+            <button
+                class="add-btn"
+                id="addStudentBtn"
+            >
                 ＋ 新增學生
             </button>
 
         </div>
 
 
-        <div
-            id="studentGrid"
-            class="student-grid">
+        <!-- 學生列表 -->
+
+        <div id="studentList">
+
+            <div class="loading">
+                正在讀取學生資料……
+            </div>
+
         </div>
 
     </div>
@@ -466,74 +382,39 @@ header p{
 </div>
 
 
-<!-- =====================================================
-     MILES MODAL
-===================================================== -->
+<!-- ==================== Miles Modal ==================== -->
 
 <div
+    class="modal"
     id="milesModal"
-    class="modal">
+>
 
-    <div class="modal-box">
+    <div class="modal-content">
 
-        <h2 id="milesModalTitle">
-            ＋ 增加 Miles
-        </h2>
-
-        <p id="milesModalStudent"></p>
-
-        <select id="mileAmount">
-
-            <option value="1">
-                ＋1 Mile
-            </option>
-
-            <option value="2">
-                ＋2 Miles
-            </option>
-
-            <option value="3">
-                ＋3 Miles
-            </option>
-
-            <option value="5">
-                ＋5 Miles
-            </option>
-
-            <option value="10">
-                ＋10 Miles
-            </option>
-
-            <option value="custom">
-                自訂 Miles
-            </option>
-
-        </select>
+        <h3 id="milesModalTitle">
+            Miles
+        </h3>
 
         <input
             type="number"
-            id="customMiles"
-            min="1"
-            step="1"
+            id="milesInput"
             placeholder="請輸入 Miles"
-            style="display:none;">
+        >
 
         <div class="modal-buttons">
 
             <button
                 class="cancel-btn"
-                id="cancelMilesBtn">
-
+                id="cancelMilesBtn"
+            >
                 取消
-
             </button>
 
             <button
                 class="confirm-btn"
-                id="confirmMilesBtn">
-
+                id="confirmMilesBtn"
+            >
                 確定
-
             </button>
 
         </div>
@@ -543,62 +424,43 @@ header p{
 </div>
 
 
-<!-- =====================================================
-     ADD STUDENT MODAL
-===================================================== -->
+<!-- ==================== 新增學生 Modal ==================== -->
 
 <div
+    class="modal"
     id="addStudentModal"
-    class="modal">
+>
 
-    <div class="modal-box">
+    <div class="modal-content">
 
-        <h2>
-            ＋ 新增學生
-        </h2>
+        <h3>新增學生</h3>
 
         <input
             type="text"
-            id="newStudentId"
-            placeholder="座號，例如：01">
+            id="studentIdInput"
+            placeholder="座號"
+        >
 
         <input
             type="text"
-            id="newStudentName"
-            placeholder="學生姓名">
-
-        <select id="newStudentGrade">
-
-            <option value="3">
-                三年級
-            </option>
-
-            <option value="4">
-                四年級
-            </option>
-
-            <option value="6">
-                六年級
-            </option>
-
-        </select>
+            id="studentNameInput"
+            placeholder="學生姓名"
+        >
 
         <div class="modal-buttons">
 
             <button
                 class="cancel-btn"
-                id="cancelAddStudentBtn">
-
+                id="cancelAddStudentBtn"
+            >
                 取消
-
             </button>
 
             <button
                 class="confirm-btn"
-                id="confirmAddStudentBtn">
-
+                id="confirmAddStudentBtn"
+            >
                 新增
-
             </button>
 
         </div>
@@ -608,30 +470,28 @@ header p{
 </div>
 
 
-<!-- =====================================================
-     HISTORY MODAL
-===================================================== -->
+<!-- ==================== History Modal ==================== -->
 
 <div
+    class="modal"
     id="historyModal"
-    class="modal">
+>
 
-    <div class="modal-box">
+    <div class="modal-content">
 
-        <h2 id="historyTitle">
-            📖 飛行紀錄
-        </h2>
+        <h3 id="historyTitle">
+            Miles 使用紀錄
+        </h3>
 
-        <div id="historyContent"></div>
+        <div id="historyList"></div>
 
         <div class="modal-buttons">
 
             <button
                 class="cancel-btn"
-                id="closeHistoryBtn">
-
+                id="closeHistoryBtn"
+            >
                 關閉
-
             </button>
 
         </div>
@@ -641,549 +501,458 @@ header p{
 </div>
 
 
-<!-- =====================================================
-     FIREBASE + APP
-===================================================== -->
+<!-- ==================== Firebase ==================== -->
 
 <script type="module">
 
-/* =====================================================
-   Firebase
-===================================================== */
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-
-import {
-    getAuth,
-    signInWithEmailAndPassword,
-    signOut,
-    onAuthStateChanged
-}
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+    import {
+        initializeApp
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
 
-const firebaseConfig = {
-
-    apiKey:
-        "AIzaSyCF5oYAL83XW2Fa5hvdMYduKFj2gvDv1zA",
-
-    authDomain:
-        "lucke-flight.firebaseapp.com",
-
-    projectId:
-        "lucke-flight",
-
-    storageBucket:
-        "lucke-flight.firebasestorage.app",
-
-    messagingSenderId:
-        "682813117774",
-
-    appId:
-        "1:682813117774:web:ff379b46474d755d513a1f",
-
-    measurementId:
-        "G-45JZ9WENH9"
-
-};
+    import {
+        getAuth,
+        signInWithEmailAndPassword,
+        signOut,
+        onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 
-const app =
-    initializeApp(firebaseConfig);
+    import {
+        getFirestore,
+        collection,
+        getDocs
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 
-const auth =
-    getAuth(app);
+    // =========================
+    // Firebase 設定
+    // =========================
+
+    const firebaseConfig = {
+
+        apiKey: "AIzaSyCF5oYAL83XW2Fa5hvdMYduKFj2gvDv1zA",
+
+        authDomain: "lucke-flight.firebaseapp.com",
+
+        projectId: "lucke-flight",
+
+        storageBucket: "lucke-flight.firebasestorage.app",
+
+        messagingSenderId: "682813117774",
+
+        appId: "1:682813117774:web:ff379b46474d755d513a1f",
+
+        measurementId: "G-45JZ9WENH9"
+
+    };
 
 
-/* =====================================================
-   基本設定
-===================================================== */
+    // =========================
+    // 初始化 Firebase
+    // =========================
 
-const gradeRules = {
+    const app = initializeApp(firebaseConfig);
 
-    3:{
-        name:"三年級",
-        threshold:30
-    },
+    const auth = getAuth(app);
 
-    4:{
-        name:"四年級",
-        threshold:30
-    },
-
-    6:{
-        name:"六年級",
-        threshold:80
-    }
-
-};
+    const db = getFirestore(app);
 
 
-let students =
-    JSON.parse(
-        localStorage.getItem(
-            "luckyFlightStudentsV2"
-        )
-    ) || [];
+    // =========================
+    // 變數
+    // =========================
+
+    let students = [];
+
+    let currentGrade = 3;
+
+    let currentSearch = "";
+
+    let selectedStudent = null;
+
+    let milesMode = "";
 
 
-let currentGrade = 3;
+    // =========================
+    // DOM
+    // =========================
 
-let currentMilesStudentId = null;
+    const loginSection =
+        document.getElementById("loginSection");
 
-let currentMilesAction = null;
+    const dashboard =
+        document.getElementById("dashboard");
+
+    const loginBtn =
+        document.getElementById("loginBtn");
+
+    const logoutBtn =
+        document.getElementById("logoutBtn");
+
+    const loginMessage =
+        document.getElementById("loginMessage");
+
+    const teacherEmail =
+        document.getElementById("teacherEmail");
+
+    const searchInput =
+        document.getElementById("searchInput");
+
+    const studentList =
+        document.getElementById("studentList");
 
 
-/* =====================================================
-   儲存
-===================================================== */
+    // =========================
+    // 教師登入
+    // =========================
 
-function saveStudents(){
+    loginBtn.addEventListener("click", async () => {
 
-    localStorage.setItem(
-        "luckyFlightStudentsV2",
-        JSON.stringify(students)
-    );
+        const email =
+            document.getElementById("email").value.trim();
 
-}
+        const password =
+            document.getElementById("password").value;
 
 
-/* =====================================================
-   初始化測試資料
-===================================================== */
+        if (!email || !password) {
 
-function init(){
+            loginMessage.textContent =
+                "請輸入電子郵件與密碼。";
 
-    if(students.length === 0){
+            return;
+        }
 
-        students = [
 
-            {
-                id:"01",
-                name:"王小明",
-                grade:3,
-                miles:25,
-                history:[]
-            },
+        try {
 
-            {
-                id:"02",
-                name:"林小華",
-                grade:4,
-                miles:45,
-                history:[]
-            },
+            loginMessage.textContent =
+                "登入中……";
 
-            {
-                id:"03",
-                name:"陳小美",
-                grade:6,
-                miles:100,
-                history:[]
+
+            await signInWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
+
+
+            loginMessage.textContent = "";
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            loginMessage.textContent =
+                "登入失敗，請確認帳號與密碼。";
+
+        }
+
+    });
+
+
+    // =========================
+    // 登出
+    // =========================
+
+    logoutBtn.addEventListener("click", async () => {
+
+        await signOut(auth);
+
+    });
+
+
+    // =========================
+    // Firebase Authentication 狀態
+    // =========================
+
+    onAuthStateChanged(
+        auth,
+        async user => {
+
+            if (user) {
+
+                // 已登入
+                loginSection.style.display =
+                    "none";
+
+                dashboard.style.display =
+                    "block";
+
+                teacherEmail.textContent =
+                    "目前登入：" + user.email;
+
+
+                // ⭐ 從 Firestore 讀取學生
+                await loadStudentsFromFirestore();
+
+
+            } else {
+
+                // 尚未登入
+                loginSection.style.display =
+                    "block";
+
+                dashboard.style.display =
+                    "none";
+
             }
 
-        ];
-
-        saveStudents();
-
-    }
-
-    setGrade(3);
-
-}
+        }
+    );
 
 
-/* =====================================================
-   Firebase 登入
-===================================================== */
+    // =========================
+    // ⭐ Firestore 讀取學生
+    // =========================
 
-async function teacherLogin(){
+    async function loadStudentsFromFirestore() {
 
-    const email =
-        document
-            .getElementById("email")
-            .value
-            .trim();
-
-    const password =
-        document
-            .getElementById("password")
-            .value;
+        studentList.innerHTML = `
+            <div class="loading">
+                正在從 Firebase 讀取學生資料……
+            </div>
+        `;
 
 
-    if(!email || !password){
+        try {
 
-        alert(
-            "請輸入教師 Email 與密碼。"
-        );
-
-        return;
-
-    }
+            const snapshot =
+                await getDocs(
+                    collection(db, "students")
+                );
 
 
-    try{
+            students =
+                snapshot.docs.map(docSnap => {
 
-        await signInWithEmailAndPassword(
-            auth,
-            email,
-            password
-        );
-
-    }
-
-    catch(error){
-
-        console.error(
-            "Firebase Login Error:",
-            error
-        );
-
-        alert(
-            "登入失敗，請確認 Email 與密碼。"
-        );
-
-    }
-
-}
+                    const data =
+                        docSnap.data();
 
 
-/* =====================================================
-   Firebase 登入狀態
-===================================================== */
+                    return {
 
-onAuthStateChanged(
-    auth,
-    user => {
+                        // Firestore 文件 ID
+                        firestoreId:
+                            docSnap.id,
 
-        if(user){
+                        // 對應原本網站使用的欄位
+                        id:
+                            data.studentId,
 
-            document
-                .getElementById(
-                    "loginBox"
-                )
-                .style.display = "none";
+                        name:
+                            data.name,
+
+                        grade:
+                            data.grade,
+
+                        miles:
+                            data.miles || 0,
+
+                        history:
+                            data.history || []
+
+                    };
+
+                });
 
 
-            document
-                .getElementById(
-                    "dashboard"
-                )
-                .style.display = "block";
+            console.log(
+                "Firestore 學生資料：",
+                students
+            );
 
 
             renderStudents();
 
+
+        } catch (error) {
+
+            console.error(
+                "Firestore 讀取錯誤：",
+                error
+            );
+
+
+            studentList.innerHTML = `
+                <div class="empty">
+                    ❌ 讀取 Firestore 學生資料失敗<br><br>
+                    請打開瀏覽器主控台查看錯誤訊息。
+                </div>
+            `;
+
         }
 
-        else{
-
-            document
-                .getElementById(
-                    "loginBox"
-                )
-                .style.display = "block";
-
-
-            document
-                .getElementById(
-                    "dashboard"
-                )
-                .style.display = "none";
-
-        }
-
-    }
-);
-
-
-/* =====================================================
-   登出
-===================================================== */
-
-async function teacherLogout(){
-
-    try{
-
-        await signOut(auth);
-
     }
 
-    catch(error){
 
-        console.error(error);
-
-    }
-
-}
-
-
-/* =====================================================
-   年級
-===================================================== */
-
-function setGrade(grade){
-
-    currentGrade = grade;
-
+    // =========================
+    // 年級切換
+    // =========================
 
     document
-        .querySelectorAll(
-            ".grade-buttons button"
-        )
+        .querySelectorAll(".grade-btn")
         .forEach(button => {
 
-            button.classList.remove(
-                "active"
+            button.addEventListener(
+                "click",
+                () => {
+
+                    currentGrade =
+                        Number(
+                            button.dataset.grade
+                        );
+
+                    document
+                        .querySelectorAll(".grade-btn")
+                        .forEach(btn =>
+                            btn.classList.remove("active")
+                        );
+
+                    button.classList.add("active");
+
+                    renderStudents();
+
+                }
             );
 
         });
 
 
-    document
-        .getElementById(
-            "grade" + grade + "Btn"
-        )
-        .classList.add("active");
+    // =========================
+    // 搜尋
+    // =========================
 
+    searchInput.addEventListener(
+        "input",
+        () => {
 
-    renderStudents();
+            currentSearch =
+                searchInput.value
+                    .trim()
+                    .toLowerCase();
 
-}
+            renderStudents();
 
-
-/* =====================================================
-   Tickets
-===================================================== */
-
-function getTickets(student){
-
-    const threshold =
-        gradeRules[
-            student.grade
-        ].threshold;
-
-
-    return Math.floor(
-        student.miles / threshold
+        }
     );
 
-}
+
+    // =========================
+    // 顯示學生
+    // =========================
+
+    function renderStudents() {
+
+        const filteredStudents =
+            students.filter(student => {
+
+                const sameGrade =
+                    Number(student.grade) ===
+                    currentGrade;
 
 
-/* =====================================================
-   Render
-===================================================== */
-
-function renderStudents(){
-
-    const grid =
-        document.getElementById(
-            "studentGrid"
-        );
+                const keyword =
+                    currentSearch;
 
 
-    const search =
-        document.getElementById(
-            "searchInput"
-        ).value
-        .trim()
-        .toLowerCase();
-
-
-    const filtered =
-        students
-            .filter(student => {
-
-                if(
-                    student.grade !==
-                    currentGrade
-                ){
-
-                    return false;
-
-                }
-
-
-                if(!search){
-
-                    return true;
-
-                }
-
-
-                return (
-                    student.name
+                const matchSearch =
+                    !keyword ||
+                    String(student.id || "")
                         .toLowerCase()
-                        .includes(search)
-                    ||
-                    student.id
+                        .includes(keyword) ||
+                    String(student.name || "")
                         .toLowerCase()
-                        .includes(search)
-                );
-
-            })
-            .sort(
-                (a,b) =>
-                    a.id.localeCompare(
-                        b.id,
-                        undefined,
-                        {
-                            numeric:true
-                        }
-                    )
-            );
+                        .includes(keyword);
 
 
-    if(filtered.length === 0){
+                return sameGrade && matchSearch;
 
-        grid.innerHTML = `
-
-            <div class="empty">
-
-                目前沒有符合條件的學生。
-
-            </div>
-
-        `;
-
-        return;
-
-    }
+            });
 
 
-    grid.innerHTML =
-        filtered
-            .map(student => {
+        if (filteredStudents.length === 0) {
+
+            studentList.innerHTML = `
+                <div class="empty">
+                    目前沒有符合條件的學生。
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        studentList.innerHTML =
+            filteredStudents.map(student => {
+
+                const drawCost =
+                    currentGrade === 6
+                        ? 80
+                        : 30;
+
 
                 const tickets =
-                    getTickets(student);
-
-
-                const threshold =
-                    gradeRules[
-                        student.grade
-                    ].threshold;
+                    Math.floor(
+                        student.miles / drawCost
+                    );
 
 
                 return `
 
-                    <div
-                        class="student-card">
+                    <div class="student-card">
 
-                        <div
-                            class="student-top">
-
-                            <div>
-
-                                <div
-                                    class="student-name">
-
-                                    ${student.name}
-
-                                </div>
-
-                                <div
-                                    class="student-grade">
-
-                                    ${gradeRules[
-                                        student.grade
-                                    ].name}
-
-                                    ｜座號
-                                    ${student.id}
-
-                                </div>
-
-                            </div>
-
+                        <div class="student-name">
+                            ${student.name}
                         </div>
 
-
-                        <div
-                            class="miles">
-
-                            ${student.miles}
-
+                        <div class="student-info">
+                            座號：${student.id}
                         </div>
 
-
-                        <div
-                            class="miles-label">
-
-                            Miles
-
+                        <div class="miles">
+                            ${student.miles} Miles
                         </div>
 
-
-                        <div
-                            class="ticket">
-
-                            🎫 可抽獎
-
-                            <strong>
-                                ${tickets}
-                            </strong>
-
-                            次
-
-                            <div
-                                style="
-                                font-size:12px;
-                                color:#888;
-                                margin-top:4px;
-                                ">
-
-                                ${threshold}
-                                Miles／次
-
-                            </div>
-
+                        <div class="tickets">
+                            🎫 可抽獎 ${tickets} 次
                         </div>
 
-
-                        <div
-                            class="card-buttons">
+                        <div class="card-buttons">
 
                             <button
-                                class="add-btn"
-                                data-action="add"
-                                data-id="${student.id}">
-
+                                class="plus-btn"
+                                data-action="plus"
+                                data-id="${student.firestoreId}"
+                            >
                                 ＋ Miles
-
                             </button>
-
 
                             <button
                                 class="minus-btn"
                                 data-action="minus"
-                                data-id="${student.id}">
-
+                                data-id="${student.firestoreId}"
+                            >
                                 − Miles
-
                             </button>
-
 
                             <button
-                                class="use-btn"
-                                data-action="ticket"
-                                data-id="${student.id}">
-
+                                class="draw-btn"
+                                data-action="draw"
+                                data-id="${student.firestoreId}"
+                            >
                                 🎫 使用一次
-
                             </button>
-
 
                             <button
                                 class="history-btn"
                                 data-action="history"
-                                data-id="${student.id}">
-
-                                📖 飛行紀錄
-
+                                data-id="${student.firestoreId}"
+                            >
+                                📋 紀錄
                             </button>
 
                         </div>
@@ -1192,772 +961,45 @@ function renderStudents(){
 
                 `;
 
-            })
-            .join("");
+            }).join("");
 
-}
 
+        // 目前這些按鈕先不接 Firebase
+        // 下一階段再一個一個接上
 
-/* =====================================================
-   Miles Modal
-===================================================== */
 
-function openMilesModal(
-    studentId,
-    action
-){
+        studentList
+            .querySelectorAll("button")
+            .forEach(button => {
 
-    const student =
-        students.find(
-            s => s.id === studentId
-        );
+                button.addEventListener(
+                    "click",
+                    () => {
 
+                        alert(
+                            "目前正在測試 Firestore 讀取功能。\n\n" +
+                            "＋ Miles、− Miles、使用一次、紀錄等功能，" +
+                            "下一階段再接上 Firebase。"
+                        );
 
-    if(!student) return;
-
-
-    currentMilesStudentId =
-        studentId;
-
-
-    currentMilesAction =
-        action;
-
-
-    const select =
-        document.getElementById(
-            "mileAmount"
-        );
-
-
-    const customInput =
-        document.getElementById(
-            "customMiles"
-        );
-
-
-    const sign =
-        action === "add"
-        ? "＋"
-        : "−";
-
-
-    select.innerHTML = `
-
-        <option value="1">
-            ${sign}1 Mile
-        </option>
-
-        <option value="2">
-            ${sign}2 Miles
-        </option>
-
-        <option value="3">
-            ${sign}3 Miles
-        </option>
-
-        <option value="5">
-            ${sign}5 Miles
-        </option>
-
-        <option value="10">
-            ${sign}10 Miles
-        </option>
-
-        <option value="custom">
-            自訂 Miles
-        </option>
-
-    `;
-
-
-    customInput.value = "";
-
-    customInput.style.display =
-        "none";
-
-
-    select.onchange = function(){
-
-        customInput.style.display =
-            this.value === "custom"
-            ? "block"
-            : "none";
-
-    };
-
-
-    document.getElementById(
-        "milesModalTitle"
-    ).textContent =
-        action === "add"
-        ? "＋ 增加 Miles"
-        : "− 扣除 Miles";
-
-
-    document.getElementById(
-        "milesModalStudent"
-    ).textContent =
-        `${student.name}｜目前 ${student.miles} Miles`;
-
-
-    document
-        .getElementById(
-            "milesModal"
-        )
-        .classList.add("show");
-
-}
-
-
-/* =====================================================
-   Confirm Miles
-===================================================== */
-
-function confirmMiles(){
-
-    const student =
-        students.find(
-            s => s.id === currentMilesStudentId
-        );
-
-
-    if(!student) return;
-
-
-    const select =
-        document.getElementById(
-            "mileAmount"
-        );
-
-
-    let amount;
-
-
-    if(select.value === "custom"){
-
-        amount =
-            Number(
-                document.getElementById(
-                    "customMiles"
-                ).value
-            );
-
-
-        if(
-            !Number.isInteger(amount) ||
-            amount <= 0
-        ){
-
-            alert(
-                "請輸入大於 0 的整數 Miles。"
-            );
-
-            return;
-
-        }
-
-    }
-
-    else{
-
-        amount =
-            Number(select.value);
-
-    }
-
-
-    if(
-        currentMilesAction ===
-        "add"
-    ){
-
-        student.miles += amount;
-
-
-        student.history.unshift({
-
-            type:"➕ 增加 Miles",
-
-            amount:amount,
-
-            date:new Date()
-                .toLocaleString(
-                    "zh-TW"
-                )
-
-        });
-
-    }
-
-    else{
-
-        if(student.miles < amount){
-
-            alert(
-                "Miles 不足，無法扣除。"
-            );
-
-            return;
-
-        }
-
-
-        student.miles -= amount;
-
-
-        student.history.unshift({
-
-            type:"➖ 扣除 Miles",
-
-            amount:-amount,
-
-            date:new Date()
-                .toLocaleString(
-                    "zh-TW"
-                )
-
-        });
-
-    }
-
-
-    saveStudents();
-
-    closeModal(
-        "milesModal"
-    );
-
-    renderStudents();
-
-}
-
-
-/* =====================================================
-   使用一次抽獎
-===================================================== */
-
-function useTicket(studentId){
-
-    const student =
-        students.find(
-            s => s.id === studentId
-        );
-
-
-    if(!student) return;
-
-
-    const threshold =
-        gradeRules[
-            student.grade
-        ].threshold;
-
-
-    const tickets =
-        getTickets(student);
-
-
-    if(tickets <= 0){
-
-        alert(
-            `目前還不能抽獎。\n需要 ${threshold} Miles 才能抽一次。`
-        );
-
-        return;
-
-    }
-
-
-    const ok =
-        confirm(
-            `確定要讓 ${student.name} 使用一次實體抽獎嗎？\n\n將扣除 ${threshold} Miles。`
-        );
-
-
-    if(!ok) return;
-
-
-    student.miles -= threshold;
-
-
-    student.history.unshift({
-
-        type:"🎫 實體抽獎",
-
-        amount:-threshold,
-
-        date:new Date()
-            .toLocaleString(
-                "zh-TW"
-            )
-
-    });
-
-
-    saveStudents();
-
-    renderStudents();
-
-}
-
-
-/* =====================================================
-   新增學生
-===================================================== */
-
-function openAddStudentModal(){
-
-    document.getElementById(
-        "newStudentId"
-    ).value = "";
-
-
-    document.getElementById(
-        "newStudentName"
-    ).value = "";
-
-
-    document.getElementById(
-        "newStudentGrade"
-    ).value =
-        currentGrade;
-
-
-    document
-        .getElementById(
-            "addStudentModal"
-        )
-        .classList.add("show");
-
-}
-
-
-function addStudent(){
-
-    const id =
-        document.getElementById(
-            "newStudentId"
-        ).value.trim();
-
-
-    const name =
-        document.getElementById(
-            "newStudentName"
-        ).value.trim();
-
-
-    const grade =
-        Number(
-            document.getElementById(
-                "newStudentGrade"
-            ).value
-        );
-
-
-    if(!id || !name){
-
-        alert(
-            "請輸入座號與學生姓名。"
-        );
-
-        return;
-
-    }
-
-
-    const exists =
-        students.some(
-            student =>
-                student.grade === grade &&
-                student.id === id
-        );
-
-
-    if(exists){
-
-        alert(
-            "這個年級已經有相同座號的學生。"
-        );
-
-        return;
-
-    }
-
-
-    students.push({
-
-        id:id,
-
-        name:name,
-
-        grade:grade,
-
-        miles:0,
-
-        history:[]
-
-    });
-
-
-    saveStudents();
-
-    closeModal(
-        "addStudentModal"
-    );
-
-    setGrade(grade);
-
-}
-
-
-/* =====================================================
-   歷史紀錄
-===================================================== */
-
-function openHistory(studentId){
-
-    const student =
-        students.find(
-            s => s.id === studentId
-        );
-
-
-    if(!student) return;
-
-
-    document.getElementById(
-        "historyTitle"
-    ).textContent =
-        `📖 ${student.name} 的飛行紀錄`;
-
-
-    const content =
-        document.getElementById(
-            "historyContent"
-        );
-
-
-    if(
-        !student.history ||
-        student.history.length === 0
-    ){
-
-        content.innerHTML = `
-
-            <div class="empty">
-
-                目前還沒有紀錄。
-
-            </div>
-
-        `;
-
-    }
-
-    else{
-
-        content.innerHTML =
-            student.history
-                .map(item => {
-
-                    const amountText =
-                        item.amount > 0
-                        ? `+${item.amount} Miles`
-                        : `${item.amount} Miles`;
-
-
-                    return `
-
-                        <div
-                            class="history-item">
-
-                            <div>
-                                ${item.type}
-                            </div>
-
-                            <div
-                                class="history-mile">
-
-                                ${amountText}
-
-                            </div>
-
-                            <div
-                                class="history-date">
-
-                                ${item.date}
-
-                            </div>
-
-                        </div>
-
-                    `;
-
-                })
-                .join("");
-
-    }
-
-
-    document
-        .getElementById(
-            "historyModal"
-        )
-        .classList.add("show");
-
-}
-
-
-/* =====================================================
-   Modal
-===================================================== */
-
-function closeModal(id){
-
-    document
-        .getElementById(id)
-        .classList.remove("show");
-
-}
-
-
-/* =====================================================
-   按鈕事件
-===================================================== */
-
-document
-    .getElementById("loginBtn")
-    .addEventListener(
-        "click",
-        teacherLogin
-    );
-
-
-document
-    .getElementById("logoutBtn")
-    .addEventListener(
-        "click",
-        teacherLogout
-    );
-
-
-document
-    .getElementById("grade3Btn")
-    .addEventListener(
-        "click",
-        () => setGrade(3)
-    );
-
-
-document
-    .getElementById("grade4Btn")
-    .addEventListener(
-        "click",
-        () => setGrade(4)
-    );
-
-
-document
-    .getElementById("grade6Btn")
-    .addEventListener(
-        "click",
-        () => setGrade(6)
-    );
-
-
-document
-    .getElementById("searchInput")
-    .addEventListener(
-        "input",
-        renderStudents
-    );
-
-
-document
-    .getElementById("addStudentBtn")
-    .addEventListener(
-        "click",
-        openAddStudentModal
-    );
-
-
-document
-    .getElementById("cancelMilesBtn")
-    .addEventListener(
-        "click",
-        () => closeModal("milesModal")
-    );
-
-
-document
-    .getElementById("confirmMilesBtn")
-    .addEventListener(
-        "click",
-        confirmMiles
-    );
-
-
-document
-    .getElementById("cancelAddStudentBtn")
-    .addEventListener(
-        "click",
-        () => closeModal("addStudentModal")
-    );
-
-
-document
-    .getElementById("confirmAddStudentBtn")
-    .addEventListener(
-        "click",
-        addStudent
-    );
-
-
-document
-    .getElementById("closeHistoryBtn")
-    .addEventListener(
-        "click",
-        () => closeModal("historyModal")
-    );
-
-
-/* =========================
-   Enter 登入
-========================= */
-
-document
-    .getElementById("email")
-    .addEventListener(
-        "keydown",
-        event => {
-
-            if(event.key === "Enter"){
-
-                teacherLogin();
-
-            }
-
-        }
-    );
-
-
-document
-    .getElementById("password")
-    .addEventListener(
-        "keydown",
-        event => {
-
-            if(event.key === "Enter"){
-
-                teacherLogin();
-
-            }
-
-        }
-    );
-
-
-/* =========================
-   卡片按鈕
-========================= */
-
-document
-    .getElementById("studentGrid")
-    .addEventListener(
-        "click",
-        event => {
-
-            const button =
-                event.target.closest(
-                    "button[data-action]"
+                    }
                 );
 
+            });
 
-            if(!button) return;
-
-
-            const id =
-                button.dataset.id;
+    }
 
 
-            const action =
-                button.dataset.action;
+    // =========================
+    // 初始設定
+    // =========================
 
+    document
+        .querySelector('[data-grade="3"]')
+        .classList.add("active");
 
-            if(action === "add"){
-
-                openMilesModal(
-                    id,
-                    "add"
-                );
-
-            }
-
-
-            if(action === "minus"){
-
-                openMilesModal(
-                    id,
-                    "minus"
-                );
-
-            }
-
-
-            if(action === "ticket"){
-
-                useTicket(id);
-
-            }
-
-
-            if(action === "history"){
-
-                openHistory(id);
-
-            }
-
-        }
-    );
-
-
-/* =========================
-   點背景關閉 Modal
-========================= */
-
-document
-    .querySelectorAll(".modal")
-    .forEach(modal => {
-
-        modal.addEventListener(
-            "click",
-            function(event){
-
-                if(
-                    event.target === modal
-                ){
-
-                    modal.classList.remove(
-                        "show"
-                    );
-
-                }
-
-            }
-        );
-
-    });
-
-
-/* =====================================================
-   啟動
-===================================================== */
-
-init();
 
 </script>
 
 </body>
 </html>
-```
