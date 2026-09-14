@@ -1,45 +1,87 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Lucky Flight 教師管理</title>
 
+
     <style>
+
         * {
             box-sizing: border-box;
         }
 
+
         body {
             margin: 0;
-            font-family: Arial, "Noto Sans TC", sans-serif;
+
+            font-family:
+                Arial,
+                "Noto Sans TC",
+                sans-serif;
+
             background: #f4f7fb;
+
             color: #333;
         }
 
+
+        /* =========================
+           Header
+        ========================= */
+
         header {
-            background: linear-gradient(135deg, #1e3a5f, #3f6f9f);
+            background:
+                linear-gradient(
+                    135deg,
+                    #1e3a5f,
+                    #3f6f9f
+                );
+
             color: white;
+
             padding: 20px;
+
             text-align: center;
         }
 
+
         header h1 {
             margin: 0;
+
             font-size: 28px;
         }
 
+
         header p {
-            margin: 6px 0 0;
+            margin:
+                6px
+                0
+                0;
+
             opacity: 0.9;
         }
 
+
         .container {
             max-width: 1100px;
-            margin: 30px auto;
-            padding: 0 20px;
+
+            margin:
+                30px
+                auto;
+
+            padding:
+                0
+                20px;
         }
+
 
         /* =========================
            登入
@@ -47,53 +89,91 @@
 
         #loginSection {
             max-width: 400px;
-            margin: 80px auto;
+
+            margin:
+                80px
+                auto;
+
             background: white;
+
             padding: 30px;
+
             border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+
+            box-shadow:
+                0 4px 15px
+                rgba(0,0,0,0.08);
         }
+
 
         #loginSection h2 {
             text-align: center;
+
             margin-top: 0;
         }
+
 
         input,
         select {
             width: 100%;
+
             padding: 12px;
-            margin: 8px 0;
-            border: 1px solid #ccc;
+
+            margin:
+                8px
+                0;
+
+            border:
+                1px solid
+                #ccc;
+
             border-radius: 8px;
+
             font-size: 16px;
         }
 
+
         button {
             border: none;
+
             border-radius: 8px;
-            padding: 10px 16px;
+
+            padding:
+                10px
+                16px;
+
             cursor: pointer;
+
             font-size: 15px;
         }
 
+
         button:disabled {
             opacity: 0.6;
+
             cursor: not-allowed;
         }
 
+
         #loginBtn {
             width: 100%;
+
             background: #1e3a5f;
+
             color: white;
+
             margin-top: 10px;
         }
 
+
         #loginMessage {
             color: #d33;
+
             text-align: center;
+
             margin-top: 12px;
         }
+
 
         /* =========================
            後台
@@ -103,23 +183,35 @@
             display: none;
         }
 
+
         .top-bar {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
             gap: 15px;
+
             flex-wrap: wrap;
+
             margin-bottom: 20px;
         }
+
 
         .top-bar h2 {
             margin-bottom: 5px;
         }
 
+
         .logout-btn {
             background: #777;
+
             color: white;
         }
+
 
         /* =========================
            年級
@@ -127,21 +219,33 @@
 
         .grade-buttons {
             display: flex;
+
             gap: 10px;
+
             flex-wrap: wrap;
+
             margin-bottom: 20px;
         }
 
+
         .grade-btn {
             background: white;
-            border: 2px solid #d5dce5;
+
+            border:
+                2px solid
+                #d5dce5;
         }
+
 
         .grade-btn.active {
             background: #1e3a5f;
+
             color: white;
-            border-color: #1e3a5f;
+
+            border-color:
+                #1e3a5f;
         }
+
 
         /* =========================
            搜尋
@@ -149,19 +253,26 @@
 
         .search-area {
             display: flex;
+
             gap: 10px;
+
             margin-bottom: 20px;
         }
+
 
         .search-area input {
             margin: 0;
         }
 
+
         .add-btn {
             background: #2d8a57;
+
             color: white;
+
             white-space: nowrap;
         }
+
 
         /* =========================
            學生卡片
@@ -169,84 +280,141 @@
 
         #studentList {
             display: grid;
-            grid-template-columns: repeat(
-                auto-fill,
-                minmax(280px, 1fr)
-            );
+
+            grid-template-columns:
+                repeat(
+                    auto-fill,
+                    minmax(280px, 1fr)
+                );
+
             gap: 18px;
         }
 
+
         .student-card {
             background: white;
+
             border-radius: 16px;
+
             padding: 20px;
-            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+
+            box-shadow:
+                0 3px 12px
+                rgba(0,0,0,0.08);
         }
+
 
         .student-name {
             font-size: 20px;
+
             font-weight: bold;
+
             margin-bottom: 5px;
         }
+
 
         .student-info {
             color: #777;
+
             margin-bottom: 15px;
         }
+
 
         .miles {
             font-size: 28px;
+
             font-weight: bold;
+
             color: #1e5d91;
+
             margin-bottom: 5px;
         }
 
+
         .tickets {
             margin-bottom: 15px;
+
             color: #555;
         }
 
+
         .card-buttons {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+
+            grid-template-columns:
+                1fr 1fr;
+
             gap: 8px;
         }
 
+
         .plus-btn {
             background: #4caf50;
+
             color: white;
         }
+
 
         .minus-btn {
             background: #e57373;
+
             color: white;
         }
+
 
         .draw-btn {
             background: #f0a500;
+
             color: white;
         }
+
 
         .history-btn {
             background: #607d8b;
+
             color: white;
         }
 
+
+        .edit-btn {
+            background: #3f6f9f;
+
+            color: white;
+        }
+
+
+        .delete-btn {
+            background: #b94a48;
+
+            color: white;
+        }
+
+
         .empty {
             background: white;
+
             padding: 30px;
+
             border-radius: 12px;
+
             text-align: center;
+
             color: #777;
+
             grid-column: 1 / -1;
         }
 
+
         .loading {
             text-align: center;
+
             padding: 30px;
+
             color: #777;
+
             grid-column: 1 / -1;
         }
+
 
         /* =========================
            Modal
@@ -254,50 +422,114 @@
 
         .modal {
             display: none;
+
             position: fixed;
+
             z-index: 1000;
+
             inset: 0;
-            background: rgba(0,0,0,0.45);
+
+            background:
+                rgba(0,0,0,0.45);
+
             align-items: center;
+
             justify-content: center;
+
             padding: 20px;
         }
 
+
         .modal-content {
             background: white;
+
             width: 100%;
+
             max-width: 450px;
+
             max-height: 85vh;
+
             overflow-y: auto;
+
             border-radius: 16px;
+
             padding: 25px;
         }
+
 
         .modal-content h3 {
             margin-top: 0;
         }
 
+
         .modal-buttons {
             display: flex;
+
             gap: 10px;
-            justify-content: flex-end;
+
+            justify-content:
+                flex-end;
+
             margin-top: 15px;
         }
+
 
         .cancel-btn {
             background: #ddd;
         }
 
+
         .confirm-btn {
             background: #1e3a5f;
+
             color: white;
         }
 
+
+        .danger-confirm-btn {
+            background: #b94a48;
+
+            color: white;
+        }
+
+
         .add-student-info {
             color: #777;
+
             font-size: 14px;
+
             margin-bottom: 10px;
         }
+
+
+        /* =========================
+           刪除警告
+        ========================= */
+
+        .delete-warning {
+            background:
+                #fff3f3;
+
+            border:
+                1px solid
+                #efcaca;
+
+            border-radius: 10px;
+
+            padding: 14px;
+
+            line-height: 1.7;
+
+            margin:
+                15px
+                0;
+        }
+
+
+        .delete-warning strong {
+            color: #b33;
+        }
+
 
         /* =========================
            歷史紀錄
@@ -307,61 +539,119 @@
             margin-top: 15px;
         }
 
+
         .history-item {
-            border: 1px solid #e1e5ea;
+            border:
+                1px solid
+                #e1e5ea;
+
             border-radius: 10px;
+
             padding: 12px;
+
             margin-bottom: 10px;
-            background: #f8fafc;
+
+            background:
+                #f8fafc;
         }
+
 
         .history-time {
             font-size: 13px;
+
             color: #888;
+
             margin-bottom: 5px;
         }
+
 
         .history-action {
             font-weight: bold;
+
             margin-bottom: 5px;
         }
 
+
         .history-change {
             font-size: 18px;
+
             font-weight: bold;
         }
 
+
         .history-remaining {
             font-size: 13px;
+
             color: #666;
+
             margin-top: 4px;
         }
+
 
         .history-plus {
             color: #2d8a57;
         }
 
+
         .history-minus {
             color: #d9534f;
         }
+
 
         .history-draw {
             color: #e08a00;
         }
 
+
         .no-history {
             text-align: center;
+
             color: #888;
-            padding: 25px 10px;
+
+            padding:
+                25px
+                10px;
         }
+
+
+        /* =========================
+           手機版
+        ========================= */
+
+        @media (
+            max-width: 600px
+        ) {
+
+            .search-area {
+                flex-direction: column;
+            }
+
+
+            .add-btn {
+                width: 100%;
+            }
+
+
+            .card-buttons {
+                grid-template-columns:
+                    1fr 1fr;
+            }
+
+        }
+
     </style>
+
 </head>
+
 
 <body>
 
+
 <header>
 
-    <h1>✈️ Lucky Flight</h1>
+    <h1>
+        ✈️ Lucky Flight
+    </h1>
 
     <p>
         👩‍🏫 教師智慧座艙
@@ -376,7 +666,10 @@
 
 <section id="loginSection">
 
-    <h2>教師登入</h2>
+    <h2>
+        教師登入
+    </h2>
+
 
     <input
         type="email"
@@ -384,15 +677,18 @@
         placeholder="電子郵件地址"
     >
 
+
     <input
         type="password"
         id="password"
         placeholder="密碼"
     >
 
+
     <button id="loginBtn">
         登入
     </button>
+
 
     <div id="loginMessage"></div>
 
@@ -407,6 +703,7 @@
 
     <div class="container">
 
+
         <div class="top-bar">
 
             <div>
@@ -418,6 +715,7 @@
                 <div id="teacherEmail"></div>
 
             </div>
+
 
             <button
                 class="logout-btn"
@@ -440,12 +738,14 @@
                 三年級
             </button>
 
+
             <button
                 class="grade-btn"
                 data-grade="4"
             >
                 四年級
             </button>
+
 
             <button
                 class="grade-btn"
@@ -466,6 +766,7 @@
                 id="searchInput"
                 placeholder="搜尋學生姓名或座號"
             >
+
 
             <button
                 class="add-btn"
@@ -507,12 +808,14 @@
             增加 Miles
         </h3>
 
+
         <input
             type="number"
             id="milesInput"
             placeholder="請輸入 Miles"
             min="1"
         >
+
 
         <div class="modal-buttons">
 
@@ -522,6 +825,7 @@
             >
                 取消
             </button>
+
 
             <button
                 class="confirm-btn"
@@ -552,9 +856,11 @@
             ＋ 新增學生
         </h3>
 
+
         <div class="add-student-info">
             新增後 Miles 將從 0 開始。
         </div>
+
 
         <input
             type="text"
@@ -562,11 +868,13 @@
             placeholder="座號，例如：01"
         >
 
+
         <input
             type="text"
             id="newStudentName"
             placeholder="學生姓名"
         >
+
 
         <select id="newStudentGrade">
 
@@ -584,6 +892,7 @@
 
         </select>
 
+
         <div class="modal-buttons">
 
             <button
@@ -593,11 +902,135 @@
                 取消
             </button>
 
+
             <button
                 class="confirm-btn"
                 id="confirmAddStudentBtn"
             >
                 建立學生
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     編輯學生 Modal
+========================= -->
+
+<div
+    class="modal"
+    id="editStudentModal"
+>
+
+    <div class="modal-content">
+
+        <h3>
+            ✏️ 編輯學生
+        </h3>
+
+
+        <div class="add-student-info">
+            編輯學生資料不會影響目前 Miles 與歷史紀錄。
+        </div>
+
+
+        <input
+            type="text"
+            id="editStudentId"
+            placeholder="座號"
+        >
+
+
+        <input
+            type="text"
+            id="editStudentName"
+            placeholder="學生姓名"
+        >
+
+
+        <select id="editStudentGrade">
+
+            <option value="3">
+                三年級
+            </option>
+
+            <option value="4">
+                四年級
+            </option>
+
+            <option value="6">
+                六年級
+            </option>
+
+        </select>
+
+
+        <div class="modal-buttons">
+
+            <button
+                class="cancel-btn"
+                id="cancelEditStudentBtn"
+            >
+                取消
+            </button>
+
+
+            <button
+                class="confirm-btn"
+                id="confirmEditStudentBtn"
+            >
+                儲存修改
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     刪除學生 Modal
+========================= -->
+
+<div
+    class="modal"
+    id="deleteStudentModal"
+>
+
+    <div class="modal-content">
+
+        <h3>
+            🗑️ 刪除學生
+        </h3>
+
+
+        <div
+            class="delete-warning"
+            id="deleteWarning"
+        >
+        </div>
+
+
+        <div class="modal-buttons">
+
+            <button
+                class="cancel-btn"
+                id="cancelDeleteStudentBtn"
+            >
+                取消
+            </button>
+
+
+            <button
+                class="danger-confirm-btn"
+                id="confirmDeleteStudentBtn"
+            >
+                確定刪除
             </button>
 
         </div>
@@ -622,11 +1055,13 @@
             📋 Miles 紀錄
         </h3>
 
+
         <div
             class="history-list"
             id="historyList"
         >
         </div>
+
 
         <div class="modal-buttons">
 
@@ -650,6 +1085,7 @@
 
 <script type="module">
 
+
     /* =========================
        Firebase App
     ========================= */
@@ -657,7 +1093,8 @@
     import {
         initializeApp
     }
-    from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+    from
+        "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
 
     /* =========================
@@ -670,7 +1107,8 @@
         signOut,
         onAuthStateChanged
     }
-    from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+    from
+        "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 
     /* =========================
@@ -684,11 +1122,13 @@
         addDoc,
         doc,
         updateDoc,
+        deleteDoc,
         increment,
         arrayUnion,
         Timestamp
     }
-    from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+    from
+        "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 
     /* =========================
@@ -835,7 +1275,7 @@
 
 
     /* =========================
-       新增學生 Modal
+       新增學生
     ========================= */
 
     const addStudentModal =
@@ -881,7 +1321,75 @@
 
 
     /* =========================
-       歷史紀錄 Modal
+       編輯學生
+    ========================= */
+
+    const editStudentModal =
+        document.getElementById(
+            "editStudentModal"
+        );
+
+
+    const editStudentId =
+        document.getElementById(
+            "editStudentId"
+        );
+
+
+    const editStudentName =
+        document.getElementById(
+            "editStudentName"
+        );
+
+
+    const editStudentGrade =
+        document.getElementById(
+            "editStudentGrade"
+        );
+
+
+    const cancelEditStudentBtn =
+        document.getElementById(
+            "cancelEditStudentBtn"
+        );
+
+
+    const confirmEditStudentBtn =
+        document.getElementById(
+            "confirmEditStudentBtn"
+        );
+
+
+    /* =========================
+       刪除學生
+    ========================= */
+
+    const deleteStudentModal =
+        document.getElementById(
+            "deleteStudentModal"
+        );
+
+
+    const deleteWarning =
+        document.getElementById(
+            "deleteWarning"
+        );
+
+
+    const cancelDeleteStudentBtn =
+        document.getElementById(
+            "cancelDeleteStudentBtn"
+        );
+
+
+    const confirmDeleteStudentBtn =
+        document.getElementById(
+            "confirmDeleteStudentBtn"
+        );
+
+
+    /* =========================
+       歷史紀錄
     ========================= */
 
     const historyModal =
@@ -957,7 +1465,6 @@
 
                 loginMessage.textContent =
                     "";
-
 
             }
             catch (error) {
@@ -1095,14 +1602,7 @@
                 );
 
 
-            console.log(
-                "Firestore 學生資料：",
-                students
-            );
-
-
             renderStudents();
-
 
         }
         catch (error) {
@@ -1135,42 +1635,48 @@
 
     document
         .querySelectorAll(".grade-btn")
-        .forEach(button => {
+        .forEach(
+            button => {
 
-            button.addEventListener(
-                "click",
-                () => {
+                button.addEventListener(
+                    "click",
+                    () => {
 
-                    currentGrade =
-                        Number(
-                            button.dataset.grade
-                        );
+                        currentGrade =
+                            Number(
+                                button.dataset.grade
+                            );
 
 
-                    document
-                        .querySelectorAll(
-                            ".grade-btn"
-                        )
-                        .forEach(btn => {
+                        document
+                            .querySelectorAll(
+                                ".grade-btn"
+                            )
+                            .forEach(
+                                btn => {
 
-                            btn.classList.remove(
+                                    btn.classList
+                                        .remove(
+                                            "active"
+                                        );
+
+                                }
+                            );
+
+
+                        button.classList
+                            .add(
                                 "active"
                             );
 
-                        });
 
+                        renderStudents();
 
-                    button.classList.add(
-                        "active"
-                    );
+                    }
+                );
 
-
-                    renderStudents();
-
-                }
-            );
-
-        });
+            }
+        );
 
 
     /* =====================================================
@@ -1194,10 +1700,12 @@
 
 
     /* =====================================================
-       抽獎 Miles
+       抽獎門檻
     ===================================================== */
 
-    function getDrawCost(grade) {
+    function getDrawCost(
+        grade
+    ) {
 
         return Number(grade) === 6
             ? 80
@@ -1370,6 +1878,24 @@
                                         📋 紀錄
                                     </button>
 
+
+                                    <button
+                                        class="edit-btn"
+                                        data-action="edit"
+                                        data-id="${student.firestoreId}"
+                                    >
+                                        ✏️ 編輯
+                                    </button>
+
+
+                                    <button
+                                        class="delete-btn"
+                                        data-action="delete"
+                                        data-id="${student.firestoreId}"
+                                    >
+                                        🗑️ 刪除
+                                    </button>
+
                                 </div>
 
                             </div>
@@ -1383,66 +1909,88 @@
 
         studentList
             .querySelectorAll("button")
-            .forEach(button => {
+            .forEach(
+                button => {
 
-                button.addEventListener(
-                    "click",
-                    () => {
+                    button.addEventListener(
+                        "click",
+                        () => {
 
-                        const action =
-                            button.dataset.action;
-
-
-                        const firestoreId =
-                            button.dataset.id;
+                            const action =
+                                button.dataset.action;
 
 
-                        if (
-                            action === "plus"
-                        ) {
+                            const firestoreId =
+                                button.dataset.id;
 
-                            openMilesModal(
-                                firestoreId,
-                                "plus"
-                            );
+
+                            if (
+                                action === "plus"
+                            ) {
+
+                                openMilesModal(
+                                    firestoreId,
+                                    "plus"
+                                );
+
+                            }
+
+                            else if (
+                                action === "minus"
+                            ) {
+
+                                openMilesModal(
+                                    firestoreId,
+                                    "minus"
+                                );
+
+                            }
+
+                            else if (
+                                action === "draw"
+                            ) {
+
+                                useOneDraw(
+                                    firestoreId
+                                );
+
+                            }
+
+                            else if (
+                                action === "history"
+                            ) {
+
+                                showHistory(
+                                    firestoreId
+                                );
+
+                            }
+
+                            else if (
+                                action === "edit"
+                            ) {
+
+                                openEditStudentModal(
+                                    firestoreId
+                                );
+
+                            }
+
+                            else if (
+                                action === "delete"
+                            ) {
+
+                                openDeleteStudentModal(
+                                    firestoreId
+                                );
+
+                            }
 
                         }
+                    );
 
-                        else if (
-                            action === "minus"
-                        ) {
-
-                            openMilesModal(
-                                firestoreId,
-                                "minus"
-                            );
-
-                        }
-
-                        else if (
-                            action === "draw"
-                        ) {
-
-                            useOneDraw(
-                                firestoreId
-                            );
-
-                        }
-
-                        else if (
-                            action === "history"
-                        ) {
-
-                            showHistory(
-                                firestoreId
-                            );
-
-                        }
-
-                    }
-                );
-
-            });
+                }
+            );
 
     }
 
@@ -1667,7 +2215,6 @@
                     "✅ Miles 已成功更新！"
                 );
 
-
             }
             catch (error) {
 
@@ -1825,7 +2372,6 @@
                 `已扣除 ${drawCost} Miles。`
 
             );
-
 
         }
         catch (error) {
@@ -2052,13 +2598,16 @@
                         .querySelectorAll(
                             ".grade-btn"
                         )
-                        .forEach(btn => {
+                        .forEach(
+                            btn => {
 
-                            btn.classList.remove(
-                                "active"
-                            );
+                                btn.classList
+                                    .remove(
+                                        "active"
+                                    );
 
-                        });
+                            }
+                        );
 
 
                     const targetButton =
@@ -2071,9 +2620,10 @@
                         targetButton
                     ) {
 
-                        targetButton.classList.add(
-                            "active"
-                        );
+                        targetButton.classList
+                            .add(
+                                "active"
+                            );
 
                     }
 
@@ -2123,6 +2673,524 @@
 
 
     /* =====================================================
+       開啟編輯學生
+    ===================================================== */
+
+    function openEditStudentModal(
+        firestoreId
+    ) {
+
+        selectedStudent =
+            students.find(
+                student =>
+                    student.firestoreId ===
+                    firestoreId
+            );
+
+
+        if (
+            !selectedStudent
+        ) {
+
+            return;
+
+        }
+
+
+        editStudentId.value =
+            selectedStudent.id;
+
+
+        editStudentName.value =
+            selectedStudent.name;
+
+
+        editStudentGrade.value =
+            String(
+                selectedStudent.grade
+            );
+
+
+        editStudentModal.style.display =
+            "flex";
+
+
+        editStudentId.focus();
+
+    }
+
+
+    /* =====================================================
+       關閉編輯學生
+    ===================================================== */
+
+    cancelEditStudentBtn.addEventListener(
+        "click",
+        () => {
+
+            editStudentModal.style.display =
+                "none";
+
+
+            selectedStudent =
+                null;
+
+        }
+    );
+
+
+    /* =====================================================
+       儲存編輯
+    ===================================================== */
+
+    confirmEditStudentBtn.addEventListener(
+        "click",
+        async () => {
+
+            if (
+                !selectedStudent
+            ) {
+
+                return;
+
+            }
+
+
+            const newId =
+                editStudentId.value
+                    .trim();
+
+
+            const newName =
+                editStudentName.value
+                    .trim();
+
+
+            const newGrade =
+                Number(
+                    editStudentGrade.value
+                );
+
+
+            if (
+                !newId
+            ) {
+
+                alert(
+                    "請輸入座號。"
+                );
+
+                editStudentId.focus();
+
+                return;
+
+            }
+
+
+            if (
+                !newName
+            ) {
+
+                alert(
+                    "請輸入學生姓名。"
+                );
+
+                editStudentName.focus();
+
+                return;
+
+            }
+
+
+            if (
+                ![3, 4, 6]
+                    .includes(
+                        newGrade
+                    )
+            ) {
+
+                alert(
+                    "請選擇三、四或六年級。"
+                );
+
+                return;
+
+            }
+
+
+            /*
+             * 檢查：
+             * 同一年級不能有相同座號
+             */
+
+            const duplicate =
+                students.find(
+                    student =>
+
+                        student.firestoreId !==
+                        selectedStudent.firestoreId &&
+
+                        Number(
+                            student.grade
+                        ) ===
+                        newGrade &&
+
+                        String(
+                            student.id
+                        )
+                        .trim() ===
+                        newId
+
+                );
+
+
+            if (
+                duplicate
+            ) {
+
+                alert(
+
+                    `⚠️ ${newGrade} 年級已經有座號 ${newId} 的學生。\n\n` +
+                    `學生姓名：${duplicate.name}`
+
+                );
+
+                return;
+
+            }
+
+
+            try {
+
+                confirmEditStudentBtn.disabled =
+                    true;
+
+
+                confirmEditStudentBtn.textContent =
+                    "儲存中……";
+
+
+                const studentRef =
+                    doc(
+                        db,
+                        "students",
+                        selectedStudent.firestoreId
+                    );
+
+
+                await updateDoc(
+                    studentRef,
+                    {
+
+                        studentId:
+                            newId,
+
+                        name:
+                            newName,
+
+                        grade:
+                            newGrade
+
+                    }
+                );
+
+
+                editStudentModal.style.display =
+                    "none";
+
+
+                selectedStudent =
+                    null;
+
+
+                await loadStudentsFromFirestore();
+
+
+                /*
+                 * 如果學生被改到其他年級，
+                 * 自動切換到該年級
+                 */
+
+                if (
+                    currentGrade !==
+                    newGrade
+                ) {
+
+                    currentGrade =
+                        newGrade;
+
+
+                    document
+                        .querySelectorAll(
+                            ".grade-btn"
+                        )
+                        .forEach(
+                            btn => {
+
+                                btn.classList
+                                    .remove(
+                                        "active"
+                                    );
+
+                            }
+                        );
+
+
+                    const targetButton =
+                        document.querySelector(
+                            `[data-grade="${newGrade}"]`
+                        );
+
+
+                    if (
+                        targetButton
+                    ) {
+
+                        targetButton.classList
+                            .add(
+                                "active"
+                            );
+
+                    }
+
+
+                    renderStudents();
+
+                }
+
+
+                alert(
+                    "✅ 學生資料修改成功！"
+                );
+
+            }
+            catch (error) {
+
+                console.error(
+                    "編輯學生失敗：",
+                    error
+                );
+
+
+                alert(
+                    "❌ 編輯學生失敗，請查看瀏覽器主控台。"
+                );
+
+            }
+            finally {
+
+                confirmEditStudentBtn.disabled =
+                    false;
+
+
+                confirmEditStudentBtn.textContent =
+                    "儲存修改";
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       開啟刪除學生
+    ===================================================== */
+
+    function openDeleteStudentModal(
+        firestoreId
+    ) {
+
+        selectedStudent =
+            students.find(
+                student =>
+                    student.firestoreId ===
+                    firestoreId
+            );
+
+
+        if (
+            !selectedStudent
+        ) {
+
+            return;
+
+        }
+
+
+        const historyCount =
+            Array.isArray(
+                selectedStudent.history
+            )
+                ? selectedStudent.history.length
+                : 0;
+
+
+        deleteWarning.innerHTML = `
+
+            <strong>
+                ⚠️ 此操作無法復原
+            </strong>
+
+            <br><br>
+
+            確定要刪除：
+
+            <strong>
+                ${selectedStudent.name}
+            </strong>
+
+            嗎？
+
+            <br><br>
+
+            座號：
+            ${selectedStudent.id}
+
+            <br>
+
+            年級：
+            ${selectedStudent.grade}
+
+            年級
+
+            <br>
+
+            目前 Miles：
+            ${selectedStudent.miles}
+
+            <br>
+
+            歷史紀錄：
+            ${historyCount}
+            筆
+
+            <br><br>
+
+            刪除後，
+            <strong>
+                學生資料、Miles 與歷史紀錄
+            </strong>
+            都會永久刪除。
+
+        `;
+
+
+        deleteStudentModal.style.display =
+            "flex";
+
+    }
+
+
+    /* =====================================================
+       關閉刪除學生
+    ===================================================== */
+
+    cancelDeleteStudentBtn.addEventListener(
+        "click",
+        () => {
+
+            deleteStudentModal.style.display =
+                "none";
+
+
+            selectedStudent =
+                null;
+
+        }
+    );
+
+
+    /* =====================================================
+       確定刪除學生
+    ===================================================== */
+
+    confirmDeleteStudentBtn.addEventListener(
+        "click",
+        async () => {
+
+            if (
+                !selectedStudent
+            ) {
+
+                return;
+
+            }
+
+
+            try {
+
+                confirmDeleteStudentBtn.disabled =
+                    true;
+
+
+                confirmDeleteStudentBtn.textContent =
+                    "刪除中……";
+
+
+                const studentName =
+                    selectedStudent.name;
+
+
+                const studentRef =
+                    doc(
+                        db,
+                        "students",
+                        selectedStudent.firestoreId
+                    );
+
+
+                await deleteDoc(
+                    studentRef
+                );
+
+
+                deleteStudentModal.style.display =
+                    "none";
+
+
+                selectedStudent =
+                    null;
+
+
+                await loadStudentsFromFirestore();
+
+
+                alert(
+
+                    `🗑️ ${studentName} 已刪除。`
+
+                );
+
+            }
+            catch (error) {
+
+                console.error(
+                    "刪除學生失敗：",
+                    error
+                );
+
+
+                alert(
+                    "❌ 刪除學生失敗，請查看瀏覽器主控台。"
+                );
+
+            }
+            finally {
+
+                confirmDeleteStudentBtn.disabled =
+                    false;
+
+
+                confirmDeleteStudentBtn.textContent =
+                    "確定刪除";
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
        顯示歷史紀錄
     ===================================================== */
 
@@ -2159,22 +3227,18 @@
                 : [];
 
 
-        /*
-         * 最新紀錄放最上面
-         */
-
         history.sort(
             (a, b) => {
 
                 const timeA =
                     getHistoryTime(
-                        a
+                        a.time
                     );
 
 
                 const timeB =
                     getHistoryTime(
-                        b
+                        b.time
                     );
 
 
@@ -2411,6 +3475,81 @@
 
 
     /* =====================================================
+       點擊 Modal 外部也可以關閉
+    ===================================================== */
+
+    window.addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target ===
+                milesModal
+            ) {
+
+                milesModal.style.display =
+                    "none";
+
+                selectedStudent =
+                    null;
+
+            }
+
+
+            if (
+                event.target ===
+                addStudentModal
+            ) {
+
+                addStudentModal.style.display =
+                    "none";
+
+            }
+
+
+            if (
+                event.target ===
+                editStudentModal
+            ) {
+
+                editStudentModal.style.display =
+                    "none";
+
+                selectedStudent =
+                    null;
+
+            }
+
+
+            if (
+                event.target ===
+                deleteStudentModal
+            ) {
+
+                deleteStudentModal.style.display =
+                    "none";
+
+                selectedStudent =
+                    null;
+
+            }
+
+
+            if (
+                event.target ===
+                historyModal
+            ) {
+
+                historyModal.style.display =
+                    "none";
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
        初始年級
     ===================================================== */
 
@@ -2418,11 +3557,13 @@
         .querySelector(
             '[data-grade="3"]'
         )
-        .classList.add(
+        .classList
+        .add(
             "active"
         );
 
 </script>
+
 
 </body>
 </html>
